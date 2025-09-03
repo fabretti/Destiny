@@ -1,0 +1,51 @@
+h1,
+.text-h1 {
+  @include text-h1;
+}
+h2, .text-h2 {
+  @include text-h2;
+}
+.text-body-32 {
+  @include text-body-32;
+}
+.text-body-20 {
+  @include text-body-20;
+}
+.text-body-18 {
+  @include text-body-18;
+}
+.text-body-16 {
+  @include text-body-16;
+}
+.text-body-14 {
+  @include text-body-14;
+}
+.text-body-12 {
+  @include text-body-12;
+}
+.text-body-8 {
+  @include text-body-8;
+}
+
+.fw-vb {
+  font-weight: 800;
+}
+
+.fw-b {
+  font-weight: 700;
+}
+
+.fw-sb {
+  font-weight: 600;
+}
+
+.fw-n {
+  font-weight: 500;
+}
+
+.fw-l {
+  font-weight: 400;
+}
+.opacity-40 {
+  opacity: 0.4;
+}

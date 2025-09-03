@@ -1,0 +1,40 @@
+//@include mq(phone){ your styles } - пример вызова медиа запроса
+@mixin mq($breakpoint, $breakpoint1: null) {
+	@if $breakpoint == phone-320 and $breakpoint1 == phone-430 {
+		@media only screen and (width < 768px) {
+			@content;
+		}
+	} @else if $breakpoint == phone-320 {
+		@media only screen and (width <= 429px) {
+			@content;
+		}
+	} @else if $breakpoint == phone-430 {
+		@media only screen and (width < 768px) {
+			@content;
+		}
+	} @else if $breakpoint == laptop {
+		@media only screen and (width < 1024px) {
+			@content;
+		}
+	} @else if $breakpoint == desktop-medium {
+		@media only screen and (width <= 1199px) {
+			@content;
+		}
+	} @else if $breakpoint == desktop-minW {
+		@media only screen and (width >= 1440px) {
+			@content;
+		}
+	} @else if $breakpoint == desktop {
+		@media only screen and (width <= 1439px) {
+			@content;
+		}
+	} @else if $breakpoint == min768 {
+		@media only screen and (width >= 768px) {
+			@content;
+		}
+	} @else if $breakpoint == phone-375 {
+		@media only screen and (width < 768px) {
+			@content;
+		}
+	}
+}
