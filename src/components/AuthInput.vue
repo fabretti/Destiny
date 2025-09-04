@@ -58,9 +58,9 @@ const inputType = computed(() => {
     height: 55px;
     width: 100%;
     padding: 10px 26px;
-    background: rgba(63, 79, 99, 0.53);
+    background: #1E2F444D;
     border: 1px solid rgba(81, 98, 119, 1);
-    border-radius: 10px;
+    border-radius: 18px;
     color: var(--color-white);
     font-size: 18px;
     line-height: 100%;

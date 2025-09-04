@@ -1,7 +1,7 @@
 <template>
   <div class="premium-section">
     <h1 class="premium-section-title">Тарифы VIP</h1>
-    <VipTariffs :tariffs="vipTariffs" @buy="handleBuy" />
+    <VipTariffs @buy="handleBuy" />
 
     <div class="activation-section">
       <div class="activation-divider"></div>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
-import VipTariffs from '@/components/VipTariffs.vue'
+import VipTariffs from '@/components/Premium/VipTariffs.vue'
 
 interface VipTariff {
   id: number
@@ -42,22 +42,6 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>()
-
-// Данные для VIP тарифов
-const vipTariffs = ref<VipTariff[]>([
-  {
-    id: 1,
-    title: 'VIP (14 дней)',
-    price: '399',
-    image: '/src/assets/img/vip14.png',
-  },
-  {
-    id: 2,
-    title: 'VIP (30 дней)',
-    price: '399',
-    image: '/src/assets/img/vip30.png',
-  },
-])
 
 // Обработчики событий
 const handleBuy = (tariffId: number) => {
@@ -86,17 +70,6 @@ const handleVipInfo = () => {
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(103, 201, 247, 0.5), transparent);
     margin-bottom: 30px;
-  }
-
-  .activation-title {
-    font-family: var(--font-family-base);
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 100%;
-    color: var(--color-white);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
   }
 
   .activation-content {

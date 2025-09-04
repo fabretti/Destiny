@@ -1,31 +1,36 @@
 <template>
   <div class="premium-view">
     <div class="main-container">
-      <PremiumSection @buy="handleBuy" @vip-info="handleVipInfo" />
-      
+      <PremiumSection v-if="!isShowAbout" @buy="handleBuy" @vip-info="handleVipInfo" />
+      <PremiumAbout v-else @back="handleBack" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PremiumSection from '@/components/PremiumSection.vue'
+import { ref } from 'vue'
+import PremiumSection from '@/components/Premium/PremiumSection.vue'
+import PremiumAbout from '@/components/Premium/PremiumAbout.vue'
 
-// Обработчики событий
+const isShowAbout = ref(false)
+
 const handleBuy = (tariffId: number) => {
   console.log('Покупка тарифа:', tariffId)
   // Здесь будет логика покупки
 }
 
 const handleVipInfo = () => {
-  console.log('Информация о VIP')
-  // Здесь будет логика показа информации о VIP
+  isShowAbout.value = true
+}
+
+const handleBack = () => {
+  isShowAbout.value = false
 }
 </script>
 
 <style lang="scss" scoped>
 .premium-view {
-  min-height: 100vh;
-  background: rgba(9, 23, 39, 1);
+  width: 100%;
   padding: 60px 0;
 }
 

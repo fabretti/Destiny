@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../pages/HomeView.vue'
 import DownloadView from '../pages/DownloadView.vue'
 import PremiumView from '../pages/PremiumView.vue'
-import AccountView from '../pages/AccountView.vue'
+import AccountView from '../pages/Account/AccountView.vue'
+import AccountPremiumView from '../pages/Account/AccountPremiumView.vue'
 import { useAuth } from '../composables/useAuth'
 
 const router = createRouter({
@@ -32,6 +33,12 @@ const router = createRouter({
       component: AccountView,
       meta: { requiresAuth: true }, // Требует авторизации
     },
+    {
+      path: '/account/premium',
+      name: 'premium-account',
+      component: AccountPremiumView,
+      meta: { requiresAuth: true }, // Требует авторизации
+    },
   ],
 })
 
@@ -46,10 +53,13 @@ router.beforeEach((to, from, next) => {
   const requiresGuest = to.matched.some((record) => record.meta.requiresGuest)
   const isPublic = to.matched.some((record) => record.meta.public)
 
-  if (requiresAuth && !isLoggedIn) {
+  // Получаем значение из ref
+  const isUserLoggedIn = isLoggedIn.value
+
+  if (requiresAuth && !isUserLoggedIn) {
     // Если требуется авторизация, но пользователь не авторизован
     next('/')
-  } else if (requiresGuest && isLoggedIn) {
+  } else if (requiresGuest && isUserLoggedIn) {
     // Если требуется быть гостем, но пользователь авторизован
     next('/account')
   } else {

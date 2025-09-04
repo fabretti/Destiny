@@ -1,5 +1,5 @@
 <template>
-  <div class="vip-tariffs">
+  <div class="vip-tariffs" :class="size">
     <div class="vip-cards">
       <div v-for="tariff in tariffs" :key="tariff.id" class="vip-card">
         <div class="vip-card-image">
@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import ButtonItem from '@/shared/ButtonItem.vue'
 
 interface VipTariff {
@@ -30,18 +31,29 @@ interface VipTariff {
   image: string
 }
 
-interface Props {
-  title?: string
-  tariffs: VipTariff[]
-}
-
 interface Emits {
   (e: 'buy', tariffId: number): void
 }
 
-withDefaults(defineProps<Props>(), {
-  title: 'ТАРИФЫ VIP',
-})
+defineProps<{
+  size?: 'large' | 'small'
+}>()
+
+// Данные для VIP тарифов
+const tariffs = ref<VipTariff[]>([
+  {
+    id: 1,
+    title: 'VIP (14 дней)',
+    price: '399',
+    image: '/src/assets/img/vip14.png',
+  },
+  {
+    id: 2,
+    title: 'VIP (30 дней)',
+    price: '399',
+    image: '/src/assets/img/vip30.png',
+  },
+])
 
 const emit = defineEmits<Emits>()
 
@@ -52,8 +64,6 @@ const handleBuy = (tariffId: number) => {
 
 <style lang="scss" scoped>
 .vip-tariffs {
-  margin-bottom: 60px;
-
   .vip-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -103,6 +113,29 @@ const handleBuy = (tariffId: number) => {
       .vip-card-button {
         width: 100%;
         margin-top: auto;
+      }
+    }
+  }
+  &.large {
+    .vip-cards .vip-card .vip-card-image img {
+      width: 250px;
+    }
+  }
+  &.small {
+    .vip-cards {
+      display: flex;
+      flex-direction: column;
+    }
+    .vip-card {
+      height: 116px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .vip-card-image, .vip-card-title, .vip-card-price, .vip-card-button {
+        margin: 0;
+      }
+      .vip-card-button {
+        width: 150px;
       }
     }
   }

@@ -2,7 +2,7 @@
 :root {
   /* Colors */
   --color-primary: #263849;
-  --color-primary-light: #394E62;
+  --color-primary-light: #394e62;
   --color-secondary: #9ca3af;
   --color-white: rgba(255, 255, 255);
   --color-black: #000000;
@@ -137,7 +137,7 @@
 }
 
 /* Flexbox utilities */
-.flex {
+.d-flex {
   display: flex;
 }
 .inline-flex {
@@ -216,4 +216,12 @@
 }
 .gap-8 {
   gap: var(--spacing-8);
+}
+
+/* permanents */
+.text-uppercase {
+  text-transform: uppercase;
+}
+.text-underline {
+  text-decoration: underline;
 }

@@ -1,23 +1,40 @@
 <template>
   <HeaderBlock />
-  <RouterView />
-  <FooterBlock />
+  <main class="main-container" :class="{ 'with-aside': shouldShowAsideMenu }">
+    <AsideMenu v-if="shouldShowAsideMenu" />
+    <RouterView />
+  </main>
+  <FooterBlock v-if="!shouldShowAsideMenu" />
   <img src="@/assets/img/MainBg.png" alt="bg" class="bg-image" />
 
-  <!-- Глобальное модальное окно авторизации -->
+  <!-- Глобальные модальные окна -->
   <AuthModal @success="handleAuthSuccess" />
+  <ForgotPasswordModal v-model="showForgotPasswordModal" @success="handleForgotPasswordSuccess" />
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { RouterView } from 'vue-router'
 import HeaderBlock from './components/HeaderBlock.vue'
 import FooterBlock from './components/FooterBlock.vue'
 import AuthModal from './components/AuthModal.vue'
+import AsideMenu from './components/AsideMenu.vue'
+import ForgotPasswordModal from './components/ForgotPasswordModal.vue'
 import { useAuth } from './composables/useAuth'
 
 const router = useRouter()
-const { initAuth, closeAuthModal } = useAuth()
+const route = useRoute()
+const { initAuth, closeAuthModal, closeForgotPasswordModal, showForgotPasswordModal, isLoggedIn } =
+  useAuth()
+
+// Проверяем, находимся ли мы на странице аккаунта
+const isAccountPage = computed(() => {
+  return route.path.startsWith('/account')
+})
+
+const shouldShowAsideMenu = computed(() => {
+  return isLoggedIn.value && isAccountPage.value
+})
 
 // Инициализация авторизации при загрузке приложения
 onMounted(() => {
@@ -29,6 +46,13 @@ const handleAuthSuccess = () => {
   closeAuthModal()
   router.push('/account')
 }
+
+const handleForgotPasswordSuccess = () => {
+  // После успешного восстановления пароля закрываем модалку и показываем сообщение
+  closeForgotPasswordModal()
+  // Можно добавить уведомление об успешном восстановлении
+  console.log('Пароль успешно восстановлен')
+}
 </script>
 <style lang="scss">
 body {
@@ -36,7 +60,13 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+main {
+  display: flex;
+  &.with-aside {
+    margin-top: 40px;
+    gap: 26px;
+  }
+}
 .bg-image {
   position: fixed;
   top: 0;

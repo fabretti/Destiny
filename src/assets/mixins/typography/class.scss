@@ -8,6 +8,9 @@ h2, .text-h2 {
 .text-body-32 {
   @include text-body-32;
 }
+.text-body-24 {
+  @include text-body-24;
+}
 .text-body-20 {
   @include text-body-20;
 }
@@ -25,6 +28,10 @@ h2, .text-h2 {
 }
 .text-body-8 {
   @include text-body-8;
+}
+
+.text-link {
+  @include text-link;
 }
 
 .fw-vb {
