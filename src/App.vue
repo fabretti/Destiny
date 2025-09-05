@@ -17,9 +17,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { RouterView } from 'vue-router'
 import HeaderBlock from './components/HeaderBlock.vue'
 import FooterBlock from './components/FooterBlock.vue'
-import AuthModal from './components/AuthModal.vue'
+import AuthModal from './components/Auth/AuthModal.vue'
 import AsideMenu from './components/AsideMenu.vue'
-import ForgotPasswordModal from './components/ForgotPasswordModal.vue'
+import ForgotPasswordModal from './components/Auth/ForgotPasswordModal.vue'
 import { useAuth } from './composables/useAuth'
 
 const router = useRouter()

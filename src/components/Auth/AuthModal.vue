@@ -52,7 +52,7 @@
 import { ElMessage } from 'element-plus'
 import { useAuth } from '@/composables/useAuth'
 import AuthInput from '@/components/AuthInput.vue'
-import BaseAuthModal from '@/components/BaseAuthModal.vue'
+import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
 import { ref } from 'vue'
 import shigoImg from '@/assets/img/auth/shigo.png'
 import shigo2Img from '@/assets/img/auth/shigo2.png'

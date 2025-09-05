@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import AuthInput from '@/components/AuthInput.vue'
-import BaseAuthModal from '@/components/BaseAuthModal.vue'
+import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
 import shigo4Img from '@/assets/img/auth/shigo4.png'
 import shigo3Img from '@/assets/img/auth/shigo3.png'
 import ButtonItem from '@/shared/ButtonItem.vue'

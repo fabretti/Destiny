@@ -180,6 +180,7 @@ const handleLogout = () => {
   }
 
   .menu-list {
+    height: 100%;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -203,10 +204,8 @@ const handleLogout = () => {
       }
     }
 
-    .menu-item--logout {
+   &.menu-item--logout {
       margin-top: auto;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 16px;
     }
   }
 
@@ -217,7 +216,11 @@ const handleLogout = () => {
     cursor: pointer;
     border-radius: 12px;
     transition: all 0.3s ease;
-
+    &:hover {
+      .menu-item__text {
+        transform: translateX(8px);
+      }
+    }
     .menu-item__link--active {
       background: rgba(255, 255, 255, 0.1);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
@@ -263,7 +266,7 @@ const handleLogout = () => {
       font-size: 22px;
       line-height: 100%;
       letter-spacing: 1px;
-      transition: color 0.3s ease;
+      transition: 0.3s ease;
     }
     .menu-item__indicator {
       position: absolute;

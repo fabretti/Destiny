@@ -1,19 +1,16 @@
 <template>
-  <div class="account-premium default-wrapper">
-    <h2>Варианты VIP</h2>
+  <WrapperBlock title="Варианты VIP" class="account-premium">
     <div class="account-premium__content">
       <VipTariffs size="small" />
       <VipInfoBlock />
     </div>
-  </div>
+  </WrapperBlock>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import VipTariffs from '@/components/Premium/VipTariffs.vue'
 import VipInfoBlock from '@/components/Premium/VipInfoBlock.vue'
-
-const isShowAbout = ref(false)
+import WrapperBlock from '@/components/WrapperBlock.vue'
 </script>
 <style lang="scss">
 .account-premium {
@@ -33,7 +30,7 @@ const isShowAbout = ref(false)
           }
         }
         &:first-child {
-          .vipInfo-block__list{
+          .vipInfo-block__list {
             height: 198px;
           }
         }

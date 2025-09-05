@@ -95,6 +95,7 @@ defineProps({
       text-transform: uppercase;
     }
     &--solid-shadow {
+      text-transform: uppercase;
       border-radius: 50px;
       color: var(--color-white);
       backdrop-filter: blur(10px);

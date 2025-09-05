@@ -21,10 +21,10 @@
       </ul>
       <div class="header-info">
         <div class="header-info__online">
-          <span>В сети:</span>
-          <span class="online-count">2 200</span>
+          <span class="text-body-16">В сети:</span>
+          <span class="online-count text-body-16">2 200</span>
         </div>
-        <div class="header-info__race">
+        <div class="header-info__race text-body-16">
           <div class="online">
             <IconBase name="elies" />
             2 200
