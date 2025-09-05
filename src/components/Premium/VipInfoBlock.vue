@@ -110,7 +110,6 @@ const commands = ref<VipCommand[]>([
       font-size: 16px;
       font-weight: 600;
       font-family: 'Courier New', monospace;
-      background: rgba(103, 201, 247, 0.1);
       padding: 2px 8px;
       border-radius: 4px;
       text-align: center;

@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper-block">
-    <h2>{{ title }}</h2>
-    <slot name="header" />
+    <h2 v-if="title">{{ title }}</h2>
     <el-scrollbar height="600px">
       <slot />
     </el-scrollbar>
@@ -9,7 +8,7 @@
 </template>
 <script setup lang="ts">
 defineProps<{
-  title: string
+  title?: string
 }>()
 </script>
 <style lang="scss">

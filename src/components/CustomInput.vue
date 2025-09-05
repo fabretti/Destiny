@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-input-group">
+  <div class="custom-input-group" :class="color, size">
     <input
       :value="modelValue"
       :type="type"
@@ -7,7 +7,7 @@
       class="custom-input"
       @input="handleInput"
     />
-    <IconBase name="search" size="24" class="custom-input-icon" />
+    <IconBase v-if="search" name="search" size="24" class="custom-input-icon" />
   </div>
 </template>
 
@@ -18,11 +18,16 @@ interface Props {
   modelValue: string
   type?: string
   placeholder?: string
+  color?: string
+  search?: boolean
+  size?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   placeholder: '',
+  search: false,
+  size: 'md',
 })
 
 const emit = defineEmits<{
@@ -38,7 +43,7 @@ const handleInput = (event: Event) => {
 <style scoped lang="scss">
 .custom-input-group {
   position: relative;
-
+  
   .custom-input {
     height: 46px;
     width: 100%;
@@ -61,6 +66,24 @@ const handleInput = (event: Event) => {
     }
   }
 
+  &.white {
+    .custom-input {
+      border: none;
+      background: var(--color-white);
+      color: #747D86;
+    }
+  }
+  &.sm {
+    .custom-input {
+      font-size: 12px;
+      padding: 0 12px;
+      height: 30px;
+      border-radius: 6px;
+    }
+  }
+  &.md {
+    
+  }
   .custom-input-icon {
     position: absolute;
     right: 18px;

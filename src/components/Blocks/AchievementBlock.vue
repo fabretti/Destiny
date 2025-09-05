@@ -1,6 +1,6 @@
 <template>
   <div class="achievement-block" :class="item.status ? `status--${item.status}` : ''">
-    <div v-if="status" class="achievement-block__status">
+    <div v-if="status" class="achievement-block__status text-uppercase">
       {{ status }}
     </div>
     <div class="achievement-block__header">

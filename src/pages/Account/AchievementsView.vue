@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import WrapperBlock from '@/components/WrapperBlock.vue'
-import AchievementBlock from '@/components/AchievementBlock.vue'
+import AchievementBlock from '@/components/Blocks/AchievementBlock.vue'
 
 const achievements = [
   { id: 1, status: 'vip', name: 'ОКО ТИАТАМАРАНТЫ', quest: 'Выбейти ключи любого типа', count: '0 / 45', info: 'Награда за 45', items: [1, 2, 3, 4, 5] },

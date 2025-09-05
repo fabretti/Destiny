@@ -2,7 +2,7 @@
   <WrapperBlock title="Магазин" class="shop">
     <div class="shop-content">
       <div class="shop-content__search">
-        <CustomInput v-model="search" placeholder="Поиск по ID или названию предмета" />
+        <CustomInput v-model="search" placeholder="Поиск по ID или названию предмета" search />
       </div>
       <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
         <el-tab-pane v-for="item in items" :key="item.name" :label="item.label" :name="item.name">

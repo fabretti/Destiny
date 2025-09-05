@@ -3,8 +3,12 @@
     <img src="@/assets/img/shopItem.png" alt="item" class="shop-item__image" />
     <div class="shop-item__name">Название</div>
     <div class="shop-item__price">100 T</div>
+    <ButtonItem variant="solid" size="sm" class="w-100">Подробнее</ButtonItem>
   </div>
 </template>
+<script setup lang="ts">
+import ButtonItem from '@/shared/ButtonItem.vue'
+</script>
 <style lang="scss">
 .shop-item {
   position: relative;

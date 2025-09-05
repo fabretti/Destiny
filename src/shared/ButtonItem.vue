@@ -118,7 +118,7 @@ defineProps({
       width: 52px;
     }
     &--sm {
-      height: 22px;
+      max-height: 25px;
       border: 1px solid #b3dff438;
       backdrop-filter: blur(10px);
       box-shadow: 0px 0px 30px 0px #67c9f721;

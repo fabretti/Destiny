@@ -17,13 +17,12 @@
 import IconBase from '@/shared/IconBase.vue'
 import VipTariffs from './VipTariffs.vue'
 import VipInfoBlock from './VipInfoBlock.vue'
+import { useRouter } from 'vue-router'
 
-const emit = defineEmits<{
-  (e: 'back'): void
-}>()
+const router = useRouter()
 
 const handleBack = () => {
-  emit('back')
+  router.push('/')
 }
 </script>
 <style lang="scss">

@@ -1,6 +1,5 @@
 <template>
   <div class="download-view">
-    <div class="main-container">
       <h1 class="text-center">ЯЗЫК КЛИЕНТА ЗАВИСИТ ОТ ЯЗЫКА САЙТА</h1>
       <div class="download-view__content">
         <DownloadBlock
@@ -10,7 +9,6 @@
           :variant="item.variant"
           :link="item.link"
         />
-      </div>
     </div>
   </div>
 </template>
@@ -42,6 +40,7 @@ const downloadBlocks = [
 // @import '@/assets/mixins/media.scss';
 
 .download-view {
+  width: 100%;
   padding: 70px 0;
   .download-view__content {
     padding-top: 70px;

@@ -1,6 +1,6 @@
 <template>
   <HeaderBlock />
-  <main class="main-container" :class="{ 'with-aside': shouldShowAsideMenu }">
+  <main class="main-container" :class="{'with-aside': shouldShowAsideMenu }">
     <AsideMenu v-if="shouldShowAsideMenu" />
     <RouterView />
   </main>
@@ -31,6 +31,7 @@ const { initAuth, closeAuthModal, closeForgotPasswordModal, showForgotPasswordMo
 const isAccountPage = computed(() => {
   return route.path.startsWith('/account')
 })
+
 
 const shouldShowAsideMenu = computed(() => {
   return isLoggedIn.value && isAccountPage.value
@@ -63,6 +64,7 @@ body {
 main {
   display: flex;
   &.with-aside {
+    height: 718px;
     margin-top: 40px;
     gap: 26px;
   }

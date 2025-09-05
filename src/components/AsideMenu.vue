@@ -90,7 +90,7 @@ const defaultMenuItems: MenuItem[] = [
     id: 'premium',
     text: 'Премиум',
     icon: 'crown',
-    route: '/account/premium',
+    route: '/premium',
   },
   {
     id: 'shop',

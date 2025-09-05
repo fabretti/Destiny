@@ -1,10 +1,10 @@
 <template>
-  <div class="main">
-    <div class="main-container">
-      <IconBase name="logo" class="main-logo" />
-      <span class="main-version"> - 4.6 - </span>
-      <span class="main-title">Уникальный сервер Aion с новым функционалом</span>
-      <div class="main-btns">
+  <div class="home">
+    <div class="home-container">
+      <IconBase name="logo" class="home-logo" />
+      <span class="home-version"> - 4.6 - </span>
+      <span class="home-title">Уникальный сервер Aion с новым функционалом</span>
+      <div class="home-btns">
         <router-link to="/download">
           <ButtonItem variant="solid-shadow" size="big">Установить</ButtonItem>
         </router-link>
@@ -13,7 +13,7 @@
         </ButtonItem>
       </div>
     </div>
-    <img src="../assets/img/MainHero.png" alt="bg" class="main-bg" />
+    <img src="../assets/img/MainHero.png" alt="bg" class="home-bg" />
   </div>
 </template>
 <script setup lang="ts">
@@ -24,7 +24,7 @@ import { useAuth } from '@/composables/useAuth'
 const { openAuthModal } = useAuth()
 </script>
 <style lang="scss">
-.main {
+.home {
   height: 100%;
   position: relative;
   z-index: 2;
@@ -38,7 +38,7 @@ const { openAuthModal } = useAuth()
     height: 411px;
     background: linear-gradient(180deg, rgba(29, 42, 57, 0) 0%, rgba(29, 42, 57, 0.89) 71.35%);
   }
-  .main-container {
+  .home-container {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -47,25 +47,25 @@ const { openAuthModal } = useAuth()
     padding-bottom: 100px;
     position: relative;
     z-index: 2;
-    .main-version {
+    .home-version {
       font-weight: 400;
       font-size: 45px;
       color: #ab7c62;
     }
-    .main-title {
+    .home-title {
       font-weight: 400;
       font-size: 22px;
       line-height: 100%;
       letter-spacing: 1px;
       margin: 16px 0 40px;
     }
-    .main-btns {
+    .home-btns {
       display: flex;
       gap: 24px;
     }
   }
 
-  .main-bg {
+  .home-bg {
     position: absolute;
     top: -30px;
     left: 50%;

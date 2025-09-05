@@ -3,7 +3,6 @@ import HomeView from '../pages/HomeView.vue'
 import DownloadView from '../pages/DownloadView.vue'
 import PremiumView from '../pages/PremiumView.vue'
 import AccountView from '../pages/Account/AccountView.vue'
-import AccountPremiumView from '../pages/Account/AccountPremiumView.vue'
 import SetsView from '@/pages/Account/SetsView.vue'
 import AchievementsView from '@/pages/Account/AchievementsView.vue'
 import ShopView from '@/pages/Account/ShopView.vue'
@@ -34,12 +33,6 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: AccountView,
-      meta: { requiresAuth: true }, // Требует авторизации
-    },
-    {
-      path: '/account/premium',
-      name: 'premium-account',
-      component: AccountPremiumView,
       meta: { requiresAuth: true }, // Требует авторизации
     },
     {
