@@ -8,6 +8,7 @@
       @input="handleInput"
     />
     <IconBase v-if="search" name="search" size="24" class="custom-input-icon" />
+    <div v-if="balance" class="custom-input-toll text-uppercase">toll</div>
   </div>
 </template>
 
@@ -21,6 +22,7 @@ interface Props {
   color?: string
   search?: boolean
   size?: string
+  balance?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,6 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   search: false,
   size: 'md',
+  balance: false,
 })
 
 const emit = defineEmits<{
@@ -82,7 +85,20 @@ const handleInput = (event: Event) => {
     }
   }
   &.md {
-    
+    .custom-input {
+      font-size: 14px;
+      padding: 0 20px;
+      height: 50px;
+      border-radius: 6px;
+    }
+  }
+  .custom-input-toll {
+    @include text-body-12;
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    color: #293A4A;
   }
   .custom-input-icon {
     position: absolute;

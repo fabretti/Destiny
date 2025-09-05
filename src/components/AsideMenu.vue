@@ -60,6 +60,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import IconBase from '@/shared/IconBase.vue'
+import { useAuth } from '@/composables/useAuth'
 
 interface MenuItem {
   id: string
@@ -76,7 +77,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const route = useRoute()
+const { logout } = useAuth()
 
 // Динамические пункты меню (по умолчанию)
 const defaultMenuItems: MenuItem[] = [
@@ -161,6 +162,8 @@ const handleItemClick = (item: MenuItem) => {
 // Обработчик выхода
 const handleLogout = () => {
   // Здесь можно добавить логику выхода
+  logout()
+  router.push('/')
   console.log('Выход из системы')
   // Например, очистка токенов, редирект на страницу входа
 }

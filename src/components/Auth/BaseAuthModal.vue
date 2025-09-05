@@ -1,19 +1,9 @@
 <template>
-  <el-dialog
-    v-model="isVisible"
-    class="auth-modal"
-    width="400px"
-    :before-close="handleClose"
-    center
-  >
+  <DefaultModal v-model="isVisible" class="auth-modal" @close="handleClose">
     <div class="auth-left">
       <div class="auth-tabs">
-        <span
-          v-for="(tabOption, index) in tabs"
-          :key="tabOption.value"
-          :class="['auth-tab', activeTab === tabOption.value ? 'active' : '']"
-          @click="changeTab(tabOption.value)"
-        >
+        <span v-for="(tabOption, index) in tabs" :key="tabOption.value"
+          :class="['auth-tab', activeTab === tabOption.value ? 'active' : '']" @click="changeTab(tabOption.value)">
           {{ tabOption.label }}
         </span>
       </div>
@@ -25,25 +15,13 @@
 
         <!-- Слот для формы -->
         <div class="auth-form">
-          <slot
-            :activeTab="activeTab"
-            :form="form"
-            :errors="errors"
-            :onUpdateForm="updateForm"
-            :onUpdateErrors="updateErrors"
-            :onClearErrors="clearErrors"
-            :onClearForm="clearForm"
-          />
+          <slot :activeTab="activeTab" :form="form" :errors="errors" :onUpdateForm="updateForm"
+            :onUpdateErrors="updateErrors" :onClearErrors="clearErrors" :onClearForm="clearForm" />
         </div>
 
         <!-- Кнопка с настраиваемым текстом -->
-        <ButtonItem
-          class="auth-btn"
-          variant="solid-shadow"
-          size="medium"
-          :loading="props.loading"
-          @click="handleSubmit"
-        >
+        <ButtonItem class="auth-btn" variant="solid-shadow" size="medium" :loading="props.loading"
+          @click="handleSubmit">
           {{ props.loading ? 'Загрузка...' : currentTab.buttonText }}
         </ButtonItem>
       </div>
@@ -55,12 +33,13 @@
       </p>
     </div>
     <img src="@/assets/img/auth/circle.png" alt="bg" class="auth-circle" />
-  </el-dialog>
+  </DefaultModal>
 </template>
 
 <script setup lang="ts">
 import ButtonItem from '@/shared/ButtonItem.vue'
 import { ref, computed, watch, nextTick } from 'vue'
+import DefaultModal from '@/components/Auth/DefaultModal.vue'
 
 interface TabOption {
   value: string
@@ -96,12 +75,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 
 const activeTab = ref(props.defaultTab || props.tabs[0]?.value || '')
-
-const isVisible = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
-
+const isVisible = defineModel<boolean>()
 const currentTab = computed(
   () => props.tabs.find((t) => t.value === activeTab.value) || props.tabs[0],
 )
@@ -162,16 +136,16 @@ watch(activeTab, () => {
 
 <style lang="scss">
 .auth-modal.el-dialog {
-  height: 670px;
-  width: 950px;
-  padding: 10px 30px 56px 60px;
-  background: var(--color-primary);
-  border-radius: 25px;
+  
+
+  
+
   .el-dialog__body {
     height: 100%;
     display: flex;
     gap: 40px;
   }
+
   .auth-left {
     width: 100%;
     max-width: 480px;
@@ -227,20 +201,24 @@ watch(activeTab, () => {
       flex-direction: column;
       align-items: flex-start;
       margin-top: 30px;
+
       .auth-title {
         display: grid;
         gap: 8px;
         color: var(--color-white);
         margin-bottom: 30px;
       }
+
       .auth-form {
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 30px;
+
         .password-block {
           display: grid;
           gap: 16px;
+
           .password-block-forgot {
             display: flex;
             justify-content: flex-end;
@@ -248,10 +226,12 @@ watch(activeTab, () => {
           }
         }
       }
+
       .auth-btn {
         width: 100%;
         margin-top: auto;
       }
+
       .auth-forgot {
         display: block;
         margin: 26px auto 0 auto;
@@ -264,9 +244,10 @@ watch(activeTab, () => {
         cursor: pointer;
       }
     }
-    @include mq(laptop) {
-    }
+
+    @include mq(laptop) {}
   }
+
   .auth-right {
     display: flex;
     flex-direction: column;
@@ -276,6 +257,7 @@ watch(activeTab, () => {
     width: 100%;
     max-width: 360px;
   }
+
   .auth-circle {
     position: absolute;
     right: 0;

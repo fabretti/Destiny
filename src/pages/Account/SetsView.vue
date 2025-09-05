@@ -6,7 +6,7 @@
   </WrapperBlock>
 </template>
 <script setup lang="ts">
-import WrapperBlock from '@/components/WrapperBlock.vue'
+import WrapperBlock from '@/components/Blocks/WrapperBlock.vue'
 import SetBlock from '@/components/Blocks/SetBlock.vue'
 </script>
 <style lang="scss">

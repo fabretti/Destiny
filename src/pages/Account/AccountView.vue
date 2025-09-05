@@ -1,8 +1,34 @@
 <template>
   <div class="account wrapper-block">
     <div class="account-section">
-      <div class="account-block info"></div>
+
+      <div class="account-block info">
+        <div class="info-header">
+          <div class="text-body-24 text-uppercase">LOUNDd</div>
+          <ButtonItem size="icon-30" @click="openForgotPasswordModal">
+            <IconBase name="settings" />
+          </ButtonItem>
+          <ButtonItem size="icon-30" @click="isStatisticModalVisible = true">
+            <IconBase name="statistic" />
+          </ButtonItem>
+        </div>
+        <div class="info-balance">
+          <div class="text-body-16 text-uppercase">Баланс: <span class="fw-b">3 000 TOLL</span></div>
+          <CustomInput v-model="balance" placeholder="Введите сумму" color="white" size="md" balance/>
+          <div class="info-balance__btn">
+            <div class="text-body-14">Курс 1 Toll = 1 Рубль</div>
+            <ButtonItem variant="solid-shadow" size="medium">ПОПОЛНИТЬ</ButtonItem>
+          </div>
+        </div>
+       <div class="info-cards">
+        <div class="info-cards__items">
+          <img v-for="card in cards" :key="card.id" :src="`${card.img}`" alt="cards" />
+        </div>
+       </div>
+      </div>
+
       <div class="divider vertical"></div>
+
       <div class="account-block bonuses">
         <div class="bonuses-item">
           <div class="text-body-16 text-center text-uppercase">Бонусы за<br/> пополнение</div>
@@ -19,10 +45,11 @@
           <div class="text-body-16 text-center text-uppercase">Весь список бонусов </div>
           <el-scrollbar height="160px" always>
             <div class="bonuses-item__list">
-              <div v-for="item in 3" class="block-item">
-                <div class="text-body-12">350 toll</div>
+              <div v-for="item in bonusesList" :key="item.id" class="block-item">
+                <div class="text-body-12">{{ item.amount }} toll</div>
                 <div class="items">
-                  <img v-for="img in 3" :key="img" src="@/assets/img/item.png" alt="item" />
+                  <img v-for="img in item.items" :key="img" src="@/assets/img/item.png" alt="item" />
+                  <IconBase :name="item.status === 1 ? 'accept-active' : 'accept'" size="24" class="accept" />
                 </div>
               </div>
             </div>
@@ -32,6 +59,7 @@
       </div>
     </div>
     <div class="divider horizontal"></div>
+
     <div class="account-section">
       <div class="account-block promocode">
         <div class="text-body-16 text-center text-uppercase">Промокоды</div>
@@ -43,13 +71,11 @@
               <ButtonItem variant="solid" size="sm">Активировать</ButtonItem>
             </div>
           </div>
-          <div class="promocode-text text-body-12">
-            <div class="fw-b">Важная информация:</div> </br>  
-            Промокоды начисляют бонусные токены на ваш счет. Активировать промокод можно только один раз 
-          </div>
       </div>
       </div>
+
       <div class="divider vertical"></div>
+      
       <div class="account-block mmotop">
         <div class="text-body-16 text-center text-uppercase">Бонусы за<br/> ММОТОР</div>
         <div class="mmotop-coins">
@@ -60,25 +86,59 @@
         <span class="text-body-12 text-underline">Проголосовать</span>
       </div>
     </div>
+    <StatisticModal v-model="isStatisticModalVisible" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import CustomInput from '@/components/CustomInput.vue'
+import IconBase from '@/shared/IconBase.vue'
+import StatisticModal from '@/components/StatisticModal.vue'
 
-const router = useRouter()
-const { logout } = useAuth()
+const { openForgotPasswordModal } = useAuth()
 
 const promocode = ref('')
+const balance = ref('')
+const isStatisticModalVisible = ref(false)
 
-const handleLogout = () => {
-  logout()
-  router.push('/')
-}
+const cards = ref([
+  {
+    id: 1,
+    img: '/src/assets/img/cards/mastercard.png',
+  },
+  {
+    id: 2,
+    img: '/src/assets/img/cards/visa.png',
+  },
+  {
+    id: 3,
+    img: '/src/assets/img/cards/mir.png',
+  },
+  {
+    id: 4,
+    img: '/src/assets/img/cards/crypto.png',
+  }
+
+])
+const bonusesList = ref([
+  {
+    id: 1,
+    amount: 350,
+    items: [1, 2, 3],
+    status: 1,
+  },
+  {
+    id: 2,
+    amount: 120,
+    items: [1, 2, 3],
+    status: 0,
+  },
+])
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -89,10 +149,40 @@ const handleLogout = () => {
     display: flex;
     .account-block {
       padding: 12px;
-
+      &.info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        .info-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .info-balance {
+          display: grid;
+          gap: 18px;
+          width: 100%;
+          .info-balance__btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+        }
+        .info-cards {
+          .info-cards__items {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+        }
+      }
       &.bonuses {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 12px;
         .bonuses-item {
           display: flex;
@@ -125,8 +215,15 @@ const handleLogout = () => {
               align-items: center;
               gap: 8px;
               .items {
+                position: relative;
                 display: flex;
                 gap: 8px;
+                .accept {
+                  position: absolute;
+                  right: -30px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                }
               }
             }
           }
@@ -137,20 +234,15 @@ const handleLogout = () => {
         flex-direction: column;
         gap: 26px;
         .promocode-content {
-          display: grid;
-          grid-template-columns: 300px 1fr;
-          gap: 32px;
           .promocode-input {
             display: grid;
             gap: 10px;
             .promocode-input__bottom {
               display: flex;
               align-items: center;
+              justify-content: space-between;
               gap: 16px;
             }
-          }
-          .promocode-text  {
-            letter-spacing: 0.4px;
           }
         }
       }
@@ -173,6 +265,7 @@ const handleLogout = () => {
       }
       &:first-child {
         width: 100%;
+        padding: 12px 60px;
       }
       &:last-child {
         min-width: 240px;

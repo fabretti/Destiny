@@ -117,6 +117,10 @@ defineProps({
       height: 52px;
       width: 52px;
     }
+    &--icon-30 {
+      height: 30px;
+      width: 30px;
+    }
     &--sm {
       max-height: 25px;
       border: 1px solid #b3dff438;

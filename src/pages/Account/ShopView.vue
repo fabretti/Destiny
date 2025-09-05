@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import WrapperBlock from '@/components/WrapperBlock.vue'
+import WrapperBlock from '@/components/Blocks/WrapperBlock.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import ShopItem from '@/components/Blocks/ShopItem.vue'
 import type { TabsPaneContext } from 'element-plus'

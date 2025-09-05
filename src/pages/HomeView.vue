@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="home-container">
+    <div class="home-block">
       <IconBase name="logo" class="home-logo" />
       <span class="home-version"> - 4.6 - </span>
       <span class="home-title">Уникальный сервер Aion с новым функционалом</span>
@@ -25,6 +25,7 @@ const { openAuthModal } = useAuth()
 </script>
 <style lang="scss">
 .home {
+  width: 100%;
   height: 100%;
   position: relative;
   z-index: 2;
@@ -38,7 +39,8 @@ const { openAuthModal } = useAuth()
     height: 411px;
     background: linear-gradient(180deg, rgba(29, 42, 57, 0) 0%, rgba(29, 42, 57, 0.89) 71.35%);
   }
-  .home-container {
+
+  .home-block {
     height: 100%;
     display: flex;
     flex-direction: column;

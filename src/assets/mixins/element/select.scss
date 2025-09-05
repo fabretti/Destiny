@@ -1,0 +1,17 @@
+.el-select {
+  .el-select__wrapper {
+    background: var(--color-primary);
+    border-bottom: 1px solid var(--color-white);
+    border-radius: 0;
+    box-shadow: none;
+    .el-select__placeholder {
+      color: var(--color-white);
+    }
+  }
+}
+.el-popper.is-light {
+  background: var(--color-grey-light);
+  .el-select-dropdown__item.is-selected {
+    color: var(--color-primary);
+  }
+}

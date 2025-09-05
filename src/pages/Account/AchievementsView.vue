@@ -6,7 +6,7 @@
   </WrapperBlock>
 </template>
 <script setup lang="ts">
-import WrapperBlock from '@/components/WrapperBlock.vue'
+import WrapperBlock from '@/components/Blocks/WrapperBlock.vue'
 import AchievementBlock from '@/components/Blocks/AchievementBlock.vue'
 
 const achievements = [

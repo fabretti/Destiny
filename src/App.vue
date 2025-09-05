@@ -1,6 +1,6 @@
 <template>
   <HeaderBlock />
-  <main class="main-container" :class="{'with-aside': shouldShowAsideMenu }">
+  <main :class="{ 'with-aside': shouldShowAsideMenu, 'main-container': !isHomePage }">
     <AsideMenu v-if="shouldShowAsideMenu" />
     <RouterView />
   </main>
@@ -26,6 +26,10 @@ const router = useRouter()
 const route = useRoute()
 const { initAuth, closeAuthModal, closeForgotPasswordModal, showForgotPasswordModal, isLoggedIn } =
   useAuth()
+
+const isHomePage = computed(() => {
+  return route.path === '/'
+})
 
 // Проверяем, находимся ли мы на странице аккаунта
 const isAccountPage = computed(() => {
@@ -62,6 +66,8 @@ body {
   flex-direction: column;
 }
 main {
+  position: relative;
+  height: 100%;
   display: flex;
   &.with-aside {
     height: 718px;
