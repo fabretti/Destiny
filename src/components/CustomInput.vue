@@ -6,6 +6,7 @@
       :placeholder="placeholder"
       class="custom-input"
       @input="handleInput"
+      @keydown="handleKeydown"
     />
     <IconBase v-if="search" name="search" size="24" class="custom-input-icon" />
     <div v-if="balance" class="custom-input-toll text-uppercase">toll</div>
@@ -16,7 +17,7 @@
 import IconBase from '@/shared/IconBase.vue'
 
 interface Props {
-  modelValue: string
+  modelValue: string | number | null;
   type?: string
   placeholder?: string
   color?: string
@@ -34,12 +35,41 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string]
+  'update:modelValue': [value: string | number | null]
 }>()
+
+const handleKeydown = (event: KeyboardEvent) => {
+  // Если это поле для ввода суммы (balance), блокируем ввод нецифровых символов
+  if (props.balance) {
+    // Разрешаем: цифры (0-9), Backspace, Delete, Tab, Escape, Enter, стрелки
+    const allowedKeys = [
+      'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+      'Home', 'End'
+    ]
+    
+    // Разрешаем Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+Z
+    if (event.ctrlKey && ['a', 'c', 'v', 'x', 'z'].includes(event.key.toLowerCase())) {
+      return
+    }
+    
+    // Блокируем все остальные символы, кроме цифр и разрешенных клавиш
+    if (!allowedKeys.includes(event.key) && !/^[0-9]$/.test(event.key)) {
+      event.preventDefault()
+    }
+  }
+}
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
-  emit('update:modelValue', target.value)
+  let value = target.value
+  
+  // Если это поле для ввода суммы (balance), разрешаем только цифры
+  if (props.balance) {
+    value = value.replace(/[^0-9]/g, '')
+  }
+  
+  emit('update:modelValue', value as string | number | null)
 }
 </script>
 

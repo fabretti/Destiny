@@ -4,7 +4,7 @@
     <div class="set-block__info">
       <div class="name">
         <p>Набор новичка</p>
-        <span class="text-underline">190 tool</span>
+        <span class="text-underline">{{ formatCurrency('190') }}</span>
       </div>
       <div class="items">
         <img v-for="item in 7" src="@/assets/img/item.png" alt="item" />
@@ -17,6 +17,7 @@
 <script setup>
 import IconBase from '@/shared/IconBase.vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
+import { formatCurrency } from '@/utils/formatters'
 </script>
 <style lang="scss">
 .set-block {

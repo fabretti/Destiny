@@ -52,7 +52,7 @@ const { openAuthModal } = useAuth()
     .home-version {
       font-weight: 400;
       font-size: 45px;
-      color: #ab7c62;
+      color: var(--color-brown);
     }
     .home-title {
       font-weight: 400;

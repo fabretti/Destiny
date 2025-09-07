@@ -136,10 +136,7 @@ watch(activeTab, () => {
 
 <style lang="scss">
 .auth-modal.el-dialog {
-  
-
-  
-
+  height: 670px;
   .el-dialog__body {
     height: 100%;
     display: flex;

@@ -56,11 +56,11 @@ const options = [
   },
 ]
 const statisticList = ref([
-  { id: 1, place: 'Место #10', value: '1 000 000', title: 'Кинар заработано' },
-  { id: 2, place: 'Место #1000', value: '3 789', title: 'Убито мобов' },
-  { id: 3, place: 'Место #1000', value: '120', type: 'часов', title: 'Проведено времени в игре' },
-  { id: 4, place: 'Место #1000', value: '10', type: 'игроков', title: 'Добавлены в ЧС' },
-  { id: 4, place: 'Место #15', value: '33 899', title: 'Получено очков бездны' },
+  { id: 1, place: '10', value: '1 000 000', title: 'Кинар заработано' },
+  { id: 2, place: '1000', value: '3 789', title: 'Убито мобов' },
+  { id: 3, place: '1000', value: '120', type: 'часов', title: 'Проведено времени в игре' },
+  { id: 4, place: '1000', value: '10', type: 'игроков', title: 'Добавлены в ЧС' },
+  { id: 4, place: '15', value: '33 899', title: 'Получено очков бездны' },
 ])
 const isVisible = defineModel<boolean>()
 </script>

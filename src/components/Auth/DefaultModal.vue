@@ -2,7 +2,7 @@
   <el-dialog
     v-model="isVisible"
     class="default-modal"
-    width="400px"
+    :width="width"
     :before-close="handleClose"
     :show-close="false"
     center
@@ -19,6 +19,14 @@
 import IconBase from '@/shared/IconBase.vue'
 import { ref, computed } from 'vue'
 
+interface Props {
+  width?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  width: '950px',
+})
+
 const isVisible = defineModel<boolean>()
 const emit = defineEmits(['close'])
 const handleClose = () => {
@@ -28,9 +36,7 @@ const handleClose = () => {
 </script>
 <style lang="scss">
 .default-modal.el-dialog {
-  height: 670px;
-  width: 950px;
-  padding: 10px 30px 56px 60px;
+  padding: 16px 60px 56px;
   background: var(--color-primary);
   border-radius: 25px;
   

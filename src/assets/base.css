@@ -10,6 +10,8 @@
   --color-grey: rgb(134, 143, 154);
   --color-grey-light: #d1d5db;
   --color-grey-dark: #4b5563;
+  --color-brown: #AB7C62;
+  --color-border: #31445B;
 
   /* Typography */
   --font-family-base: 'Georgia Pro';
@@ -69,6 +71,9 @@
 }
 .color-grey-dark {
   color: var(--color-grey-dark);
+}
+.color-brown {
+  color: var(--color-brown);
 }
 
 /* Spacing utilities */

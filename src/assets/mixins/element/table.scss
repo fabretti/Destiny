@@ -1,0 +1,23 @@
+.CustomTable {
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  overflow: hidden;
+}
+.el-table {
+  --el-bg-color: #223346;
+  --el-fill-color-light: var(--color-primary-light);
+  --el-text-color-regular: var(--color-white);
+  --el-text-color-secondary: var(--color-white);
+  --el-fill-color-lighter: #24384b;
+  --el-table-border: 1px solid var(--color-primary-light);
+  --el-table-bg-color: #223346;
+  
+  border: 1px solid var(--color-border);
+  td.el-table__cell {
+    border: none;
+  }
+  .el-table--border .el-table__inner-wrapper:after, .el-table--border:after, .el-table--border:before, .el-table__inner-wrapper:before {
+    content: none;
+  }
+  
+}

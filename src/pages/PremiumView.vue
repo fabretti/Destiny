@@ -13,7 +13,7 @@ import PremiumAbout from '@/components/Premium/PremiumAbout.vue'
 <style lang="scss" scoped>
 .premium-view {
   width: 100%;
-  padding: 60px 0;
+  padding: 40px 0;
 }
 
 // Адаптивность

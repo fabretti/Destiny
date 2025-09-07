@@ -13,11 +13,11 @@
           </ButtonItem>
         </div>
         <div class="info-balance">
-          <div class="text-body-16 text-uppercase">Баланс: <span class="fw-b">3 000 TOLL</span></div>
-          <CustomInput v-model="balance" placeholder="Введите сумму" color="white" size="md" balance/>
+          <div class="text-body-16 text-uppercase">Баланс: <span class="fw-b">{{ formatCurrency(3000) }}</span></div>
+          <CustomInput v-model="sumToPay" placeholder="Введите сумму" color="white" size="md" balance/>
           <div class="info-balance__btn">
             <div class="text-body-14">Курс 1 Toll = 1 Рубль</div>
-            <ButtonItem variant="solid-shadow" size="medium">ПОПОЛНИТЬ</ButtonItem>
+            <ButtonItem variant="solid-shadow" size="medium" @click="openDepositModal">ПОПОЛНИТЬ</ButtonItem>
           </div>
         </div>
        <div class="info-cards">
@@ -27,12 +27,12 @@
        </div>
       </div>
 
-      <div class="divider vertical"></div>
+      <Divider variant="vertical" />
 
       <div class="account-block bonuses">
         <div class="bonuses-item">
           <div class="text-body-16 text-center text-uppercase">Бонусы за<br/> пополнение</div>
-          <div class="text-body-12 text-center">Всего пополнено на: <span class="text-underline">0 toll</span></div>
+          <div class="text-body-12 text-center">Всего пополнено на: <span class="text-underline">{{ formatCurrency(0) }}</span></div>
           <div class="bonuses-item__block">
             <div class="text-body-12">Доступно<br /> к получению</div>
             <div class="items">
@@ -46,7 +46,7 @@
           <el-scrollbar height="160px" always>
             <div class="bonuses-item__list">
               <div v-for="item in bonusesList" :key="item.id" class="block-item">
-                <div class="text-body-12">{{ item.amount }} toll</div>
+                <div class="text-body-12">{{ formatCurrency(item.amount) }}</div>
                 <div class="items">
                   <img v-for="img in item.items" :key="img" src="@/assets/img/item.png" alt="item" />
                   <IconBase :name="item.status === 1 ? 'accept-active' : 'accept'" size="24" class="accept" />
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="divider horizontal"></div>
+    <Divider />
 
     <div class="account-section">
       <div class="account-block promocode">
@@ -67,42 +67,47 @@
           <div class="promocode-input">
             <CustomInput v-model="promocode" placeholder="Введите промокод" color="white" size="sm"/>
             <div class="promocode-input__bottom">
-              <div class="text-body-12 text-underline">Зачислено: 0 toll</div>
+              <div class="text-body-12 text-underline">Зачислено: {{ formatCurrency(0) }}</div>
               <ButtonItem variant="solid" size="sm">Активировать</ButtonItem>
             </div>
           </div>
       </div>
       </div>
 
-      <div class="divider vertical"></div>
+      <Divider variant="vertical" />
       
       <div class="account-block mmotop">
         <div class="text-body-16 text-center text-uppercase">Бонусы за<br/> ММОТОР</div>
         <div class="mmotop-coins">
           <span class="text-body-14">Получено</span>
-          <span class="block text-body-12">133 toll</span>
+          <span class="block text-body-12">{{ formatCurrency(133) }}</span>
         </div>
         <ButtonItem variant="solid" size="sm">Забрать</ButtonItem>
         <span class="text-body-12 text-underline">Проголосовать</span>
       </div>
     </div>
     <StatisticModal v-model="isStatisticModalVisible" />
+    <DepositModal v-model="isDepositModalVisible" :sum-to-pay="sumToPay" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { formatCurrency } from '@/utils/formatters'
 import { useAuth } from '@/composables/useAuth'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import IconBase from '@/shared/IconBase.vue'
+import Divider from '@/components/Divider.vue'
 import StatisticModal from '@/components/StatisticModal.vue'
+import DepositModal from '@/components/DepositModal.vue'
 
 const { openForgotPasswordModal } = useAuth()
 
 const promocode = ref('')
-const balance = ref('')
+const sumToPay = ref(null)
 const isStatisticModalVisible = ref(false)
+const isDepositModalVisible = ref(false)
 
 const cards = ref([
   {
@@ -138,7 +143,13 @@ const bonusesList = ref([
   },
 ])
 
-
+const openDepositModal = () => {
+  if (!sumToPay.value || sumToPay.value === '') {
+    console.log('Введите сумму для пополнения')
+    return
+  }
+  isDepositModalVisible.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -276,17 +287,6 @@ const bonusesList = ref([
     }
     &:last-child {
       min-height: 165px;
-    }
-  }
-  .divider {
-    background: #FFFFFF4F;
-    &.vertical {
-      height: 100%;
-      width: 1px;
-    }
-    &.horizontal {
-      height: 1px;
-      width: 100%;
     }
   }
 }

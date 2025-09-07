@@ -1,6 +1,7 @@
 @import './mixins/typography/typography.scss';
 @import './mixins/typography/class.scss';
 @import './mixins/media.scss';
+@import './mixins/element/index.scss';
 @import './base.css';
 
 *,
@@ -58,7 +59,7 @@ html,
   max-width: 1340px;
   padding: 0 30px;
   margin: 0 auto;
-  z-index: 2;
+  z-index: 3;
   
 }
 

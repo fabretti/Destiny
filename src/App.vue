@@ -4,10 +4,9 @@
     <AsideMenu v-if="shouldShowAsideMenu" />
     <RouterView />
   </main>
-  <FooterBlock v-if="!shouldShowAsideMenu" />
+  <FooterBlock v-if="showFooter" />
   <img src="@/assets/img/MainBg.png" alt="bg" class="bg-image" />
 
-  <!-- Глобальные модальные окна -->
   <AuthModal @success="handleAuthSuccess" />
   <ForgotPasswordModal v-model="showForgotPasswordModal" @success="handleForgotPasswordSuccess" />
 </template>
@@ -31,12 +30,16 @@ const isHomePage = computed(() => {
   return route.path === '/'
 })
 
-// Проверяем, находимся ли мы на странице аккаунта
 const isAccountPage = computed(() => {
+  if (route.path === '/account/rating' || route.path === '/account/seasonal-rating') {
+    return false
+  }
   return route.path.startsWith('/account')
 })
 
-
+const showFooter = computed(() => {
+  return isLoggedIn.value && !route.path.startsWith('/account')
+})
 const shouldShowAsideMenu = computed(() => {
   return isLoggedIn.value && isAccountPage.value
 })

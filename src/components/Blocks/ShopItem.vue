@@ -2,12 +2,16 @@
   <div class="shop-item">
     <img src="@/assets/img/shopItem.png" alt="item" class="shop-item__image" />
     <div class="shop-item__name">Название</div>
-    <div class="shop-item__price">100 T</div>
+    <div class="shop-item__price">{{ formatCurrency(price, 'T') }}</div>
     <ButtonItem variant="solid" size="sm" class="w-100">Подробнее</ButtonItem>
   </div>
 </template>
 <script setup lang="ts">
 import ButtonItem from '@/shared/ButtonItem.vue'
+import { formatCurrency } from '@/utils/formatters'
+import { ref } from 'vue'
+
+const price = ref(100)
 </script>
 <style lang="scss">
 .shop-item {
