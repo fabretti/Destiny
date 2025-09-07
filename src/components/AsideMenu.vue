@@ -115,7 +115,7 @@ const defaultMenuItems: MenuItem[] = [
     id: 'wheel',
     text: 'Колесо фортуны',
     icon: 'star-outline',
-    route: '/account/wheel',
+    route: '/account/roulette',
   },
   {
     id: 'seasonal-rating',

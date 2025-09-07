@@ -31,11 +31,13 @@ const isHomePage = computed(() => {
 })
 
 const isAccountPage = computed(() => {
-  if (route.path === '/account/rating' || route.path === '/account/seasonal-rating') {
+  if (route.path === '/account/rating' || route.path === '/account/seasonal-rating' || route.path === '/account/roulette') {
     return false
   }
   return route.path.startsWith('/account')
 })
+
+
 
 const showFooter = computed(() => {
   return isLoggedIn.value && !route.path.startsWith('/account')

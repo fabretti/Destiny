@@ -105,11 +105,11 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="seasonRating-tables__item">
-        <div class="title text-body-20 text-uppercase">Самые быстрые</div>
+      <div class="seasonRating-tables__item"> 
+        <div class="title text-body-20 text-uppercase">Рейтинг Pvp</div>
         <div class="subtitle text-body-18">Учет поединков на аренах</div>
         <div class="CustomTable">
-          <el-table :data="currentTabFastersData" stripe :max-height="tableHeight">
+          <el-table :data="pvpData" stripe :max-height="tableHeight">
             <el-table-column
               type="index"
               label="#"
@@ -270,6 +270,13 @@ const tabsFastersData = ref<TabFastersData[]>([
   }
 ])
 
+const pvpData = ref([
+  { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+  { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+  { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+  { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+])
+
 const activeTabFasters = ref('bastion')
 const currentTabFastersData = computed(() => {
   const currentTab = tabsFastersData.value.find(tab => tab.id === activeTabFasters.value)
@@ -368,6 +375,7 @@ const changeFastersTab = (tab: any) => {
         justify-content: center;
         text-transform: uppercase;
         height: 40px;
+        margin-top: auto;
         background: #1E2F444D;
         border: 1px solid #B3DFF438;
         border-radius: 50px;

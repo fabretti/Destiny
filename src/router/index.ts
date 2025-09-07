@@ -8,6 +8,7 @@ import AchievementsView from '@/pages/Account/AchievementsView.vue'
 import ShopView from '@/pages/Account/ShopView.vue'
 import RatingView from '@/pages/Account/RatingView.vue'
 import SeasonalRatingView from '@/pages/Account/SeasonRatingView.vue'
+import RouletteView from '@/pages/Account/RouletteView.vue'
 import { useAuth } from '../composables/useAuth'
 
 const router = createRouter({
@@ -65,6 +66,12 @@ const router = createRouter({
       path: '/account/seasonal-rating',
       name: 'seasonal-rating',
       component: SeasonalRatingView,
+      meta: { requiresAuth: true }, // Требует авторизации
+    },
+    {
+      path: '/account/roulette',
+      name: 'roulette',
+      component: RouletteView,
       meta: { requiresAuth: true }, // Требует авторизации
     },
   ],
