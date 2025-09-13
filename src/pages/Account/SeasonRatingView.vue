@@ -19,7 +19,7 @@
             :name="tab.id"
           >
             <div class="CustomTable">
-              <el-table :data="currentTabLeadersData" stripe :max-height="tableHeight">
+              <el-table :data="currentTabLeadersData" :max-height="tableHeight">
                 <el-table-column
                   type="index"
                   label="#"
@@ -67,7 +67,7 @@
             :name="tab.id"
           >
             <div class="CustomTable">
-              <el-table :data="currentTabFastersData" stripe :max-height="tableHeight">
+              <el-table :data="currentTabFastersData" :max-height="tableHeight">
                 <el-table-column
                   type="index"
                   label="#"
@@ -109,7 +109,7 @@
         <div class="title text-body-20 text-uppercase">Рейтинг Pvp</div>
         <div class="subtitle text-body-18">Учет поединков на аренах</div>
         <div class="CustomTable">
-          <el-table :data="pvpData" stripe :max-height="tableHeight">
+          <el-table :data="pvpData" :max-height="tableHeight">
             <el-table-column
               type="index"
               label="#"

@@ -37,6 +37,8 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
+
+  --rotation-radius: -180px;
 }
 
 /* Reset and base styles */
@@ -77,6 +79,9 @@
 }
 
 /* Spacing utilities */
+.mt-auto {
+  margin-top: auto;
+}
 .mt-1 {
   margin-top: var(--spacing-1);
 }

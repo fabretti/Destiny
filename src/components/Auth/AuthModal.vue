@@ -54,26 +54,21 @@ import { useAuth } from '@/composables/useAuth'
 import AuthInput from '@/components/AuthInput.vue'
 import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
 import { ref } from 'vue'
-import shigoImg from '@/assets/img/auth/shigo.png'
-import shigo2Img from '@/assets/img/auth/shigo2.png'
 
 const tabs = [
-  {
-    value: 'register',
-    label: 'Регистрация',
-    title: 'Регистрация',
-    subtitle: '',
-    buttonText: 'ЗАРЕГИСТРИРОВАТЬСЯ',
-    image: shigoImg,
-    description: 'Используйте уникальные данные для регистрации',
-  },
   {
     value: 'login',
     label: 'Войти',
     title: 'Войти в аккаунт',
     subtitle: 'Укажи свои данные, чтобы попасть в личный кабинет',
     buttonText: 'ВОЙТИ',
-    image: shigo2Img,
+  },
+  {
+    value: 'register',
+    label: 'Регистрация',
+    title: 'Регистрация',
+    subtitle: '',
+    buttonText: 'ЗАРЕГИСТРИРОВАТЬСЯ',
   },
 ]
 

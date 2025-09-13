@@ -67,7 +67,7 @@
           <div class="promocode-input">
             <CustomInput v-model="promocode" placeholder="Введите промокод" color="white" size="sm"/>
             <div class="promocode-input__bottom">
-              <div class="text-body-12 text-underline">Зачислено: {{ formatCurrency(0) }}</div>
+              <div class="text-body-12">Зачислено: {{ formatCurrency(0) }}</div>
               <ButtonItem variant="solid" size="sm">Активировать</ButtonItem>
             </div>
           </div>

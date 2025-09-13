@@ -8,7 +8,7 @@
         </div>
         <div class="header-timer__func">
           <div class="text">До конца сезона</div>
-          <ButtonItem size="sm">ПОДРОБНЕЕ</ButtonItem>
+          <ButtonItem size="sm" @click="goToSeason">ПОДРОБНЕЕ</ButtonItem>
         </div>
       </div>
       <ul class="header-nav">
@@ -56,14 +56,24 @@ import IconBase from '@/shared/IconBase.vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import LanguageSelector from './LanguageSelector.vue'
 import { useAuth } from '@/composables/useAuth'
+import { useRouter } from 'vue-router'
 
 const { isLoggedIn, openAuthModal } = useAuth()
+const router = useRouter()
 
 const navItems = [
   { id: 1, icon: 'Home', href: '/', name: 'Главная' },
   { id: 2, icon: 'Forum', href: '/forum', name: 'Форум' },
   { id: 3, icon: 'Premium', href: '/premium', name: 'Премиум' },
 ]
+
+const goToSeason = () => {
+  if (isLoggedIn.value) {
+    router.push('/account/seasonal-rating')
+  } else {
+    openAuthModal()
+  }
+}
 </script>
 
 <style lang="scss">

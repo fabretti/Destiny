@@ -24,6 +24,11 @@
             class="indicator"
             name="indicator"
           />
+          <IconBase
+            v-else
+            class="indicator"
+            name="indicator-empty"
+          />
         </div>
       </div>
        <div class="text-body-20">Сумма к пополнению: {{ formatCurrency(sumToPay) }}</div>
@@ -128,6 +133,11 @@ const handleDeposit = () => {
           background-color: rgba(34, 51, 68, 1);
         }
         .indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 64px;
+          height: 64px;
           margin-left: auto;
         }
         .cards {

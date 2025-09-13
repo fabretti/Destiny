@@ -27,10 +27,7 @@
       </div>
     </div>
     <div class="auth-right">
-      <img :src="currentTab.image" alt="bg" class="auth-right-img" />
-      <p v-if="currentTab.description" class="color-white">
-        {{ currentTab.description }}
-      </p>
+      <img src="@/assets/img/auth/shigo.png" alt="bg" class="auth-right-img" />
     </div>
     <img src="@/assets/img/auth/circle.png" alt="bg" class="auth-circle" />
   </DefaultModal>
@@ -47,8 +44,6 @@ interface TabOption {
   title: string
   subtitle?: string
   buttonText: string
-  image: string
-  description?: string
 }
 
 interface Props {

@@ -60,8 +60,6 @@
 import { ref, computed } from 'vue'
 import AuthInput from '@/components/AuthInput.vue'
 import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
-import shigo4Img from '@/assets/img/auth/shigo4.png'
-import shigo3Img from '@/assets/img/auth/shigo3.png'
 import ButtonItem from '@/shared/ButtonItem.vue'
 
 interface Props {
@@ -83,7 +81,6 @@ const tabs = [
     title: 'Смена пароля',
     subtitle: '',
     buttonText: 'СОХРАНИТЬ ИЗМЕНЕНИЯ',
-    image: shigo4Img,
     description: 'Код восстановления будет отправлен на указанный email',
   },
   {
@@ -92,7 +89,6 @@ const tabs = [
     title: 'Смена email',
     subtitle: 'Ваш текущий email: <span class="text-underline">mien.lu@yandex.ru</span>',
     buttonText: 'СОХРАНИТЬ ИЗМЕНЕНИЯ',
-    image: shigo3Img,
   },
 ]
 

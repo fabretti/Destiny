@@ -17,7 +17,7 @@
           :name="tab.id"
         >
           <div class="CustomTable">
-            <el-table :data="currentTabData" stripe max-height="600">
+            <el-table :data="currentTabData" max-height="600">
               <el-table-column
                 type="index"
                 label="#"

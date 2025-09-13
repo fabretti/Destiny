@@ -19,5 +19,7 @@
   .el-table--border .el-table__inner-wrapper:after, .el-table--border:after, .el-table--border:before, .el-table__inner-wrapper:before {
     content: none;
   }
-  
+  &.el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell {
+    background-color: inherit;
+  }
 }
