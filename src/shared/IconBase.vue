@@ -41,5 +41,11 @@ onMounted(async () => {
       height: 24px;
     }
   }
+  &.size-14 {
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
 }
 </style>

@@ -5,47 +5,30 @@
     </div>
     <div class="seasonRating-title">
       <h1 class="text-uppercase">Сезонный рейтинг</h1>
-      <div class="text-body-18 mt-4">Обнуление и выдача наград через: 
-        <span class="text-underline">23 дня 14 часов</span></div>
+      <div class="text-body-18 mt-4">Обнуление и выдача наград через:
+        <span class="text-underline">23 дня 14 часов</span>
+      </div>
     </div>
     <div class="seasonRating-tables">
       <div class="seasonRating-tables__item">
         <div class="title text-body-20 text-uppercase">Лидеры</div>
         <el-tabs v-model="activeTabLeaders" type="card" @tab-click="changeLeadersTab">
-          <el-tab-pane 
-            v-for="tab in tabsLeadersData" 
-            :key="tab.id"
-            :label="tab.name" 
-            :name="tab.id"
-          >
+          <el-tab-pane v-for="tab in tabsLeadersData" :key="tab.id" :label="tab.name" :name="tab.id">
             <div class="CustomTable">
               <el-table :data="currentTabLeadersData" :max-height="tableHeight">
-                <el-table-column
-                  type="index"
-                  label="#"
-                  width="50"
-                >
+                <el-table-column type="index" label="#" width="50">
                 </el-table-column>
-                <el-table-column
-                  prop="name"
-                  label="Никнейм"
-                >
+                <el-table-column prop="name" label="Никнейм">
                   <template #default="{ row }">
                     <div>{{ row.name }}</div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="oc"
-                  label="ОС"
-                >
+                <el-table-column prop="oc" label="ОС">
                   <template #default="{ row }">
                     <div>{{ formatCurrency(row.oc, 'ОС') }}</div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="reward"
-                  label="Награда"
-                >
+                <el-table-column prop="reward" label="Награда">
                   <template #default="{ row }">
                     <div class="rewards">
                       <img v-for="item in 3" src="@/assets/img/item.png" alt="reward" class="reward-item" />
@@ -60,40 +43,22 @@
       <div class="seasonRating-tables__item">
         <div class="title text-body-20 text-uppercase">Самые быстрые</div>
         <el-tabs v-model="activeTabFasters" type="card" @tab-click="changeFastersTab">
-          <el-tab-pane 
-            v-for="tab in tabsFastersData" 
-            :key="tab.id"
-            :label="tab.name" 
-            :name="tab.id"
-          >
+          <el-tab-pane v-for="tab in tabsFastersData" :key="tab.id" :label="tab.name" :name="tab.id">
             <div class="CustomTable">
               <el-table :data="currentTabFastersData" :max-height="tableHeight">
-                <el-table-column
-                  type="index"
-                  label="#"
-                  width="50"
-                >
+                <el-table-column type="index" label="#" width="50">
                 </el-table-column>
-                <el-table-column
-                  prop="name"
-                  label="Никнейм"
-                >
+                <el-table-column prop="name" label="Никнейм">
                   <template #default="{ row }">
                     <div>{{ row.name }}</div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="time"
-                  label="Время"
-                >
+                <el-table-column prop="time" label="Время">
                   <template #default="{ row }">
                     <div>{{ row.time }}</div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="reward"
-                  label="Награда"
-                >
+                <el-table-column prop="reward" label="Награда">
                   <template #default="{ row }">
                     <div class="rewards">
                       <img v-for="item in 3" src="@/assets/img/item.png" alt="reward" class="reward-item" />
@@ -105,37 +70,24 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="seasonRating-tables__item"> 
+      <div class="seasonRating-tables__item">
         <div class="title text-body-20 text-uppercase">Рейтинг Pvp</div>
         <div class="subtitle text-body-18">Учет поединков на аренах</div>
         <div class="CustomTable">
           <el-table :data="pvpData" :max-height="tableHeight">
-            <el-table-column
-              type="index"
-              label="#"
-              width="50"
-            >
+            <el-table-column type="index" label="#" width="50">
             </el-table-column>
-            <el-table-column
-              prop="name"
-              label="Никнейм"
-            >
+            <el-table-column prop="name" label="Никнейм">
               <template #default="{ row }">
                 <div>{{ row.name }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="time"
-              label="Время"
-            >
+            <el-table-column prop="time" label="Время">
               <template #default="{ row }">
                 <div>{{ row.time }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="reward"
-              label="Награда"
-            >
+            <el-table-column prop="reward" label="Награда">
               <template #default="{ row }">
                 <div class="rewards">
                   <img v-for="item in 3" src="@/assets/img/item.png" alt="reward" class="reward-item" />
@@ -165,7 +117,6 @@ import { formatCurrency } from '@/utils/formatters'
 import IconBase from '@/shared/IconBase.vue'
 import { useRouter } from 'vue-router'
 import Divider from '@/components/Divider.vue'
-import ButtonItem from '@/shared/ButtonItem.vue'
 import ShopItem from '@/components/Blocks/ShopItem.vue'
 
 const router = useRouter()
@@ -190,9 +141,9 @@ interface BaseTabData<T> {
   data: T[]
 }
 
-interface TabLeadersData extends BaseTabData<seasonLeadersItem> {}
+interface TabLeadersData extends BaseTabData<seasonLeadersItem> { }
 
-interface TabFastersData extends BaseTabData<seasonFastersItem> {}
+interface TabFastersData extends BaseTabData<seasonFastersItem> { }
 
 const tableHeight = ref(260)
 const tabsLeadersData = ref<TabLeadersData[]>([
@@ -200,8 +151,8 @@ const tabsLeadersData = ref<TabLeadersData[]>([
     id: 'leaders',
     name: 'Лидеры ОС',
     data: [
-    { id: 1, name: 'kekov', oc: 1500, reward: [] },
-    { id: 1, name: 'kekov', oc: 1500, reward: [] },
+      { id: 1, name: 'kekov', oc: 1500, reward: [] },
+      { id: 1, name: 'kekov', oc: 1500, reward: [] },
     ]
   },
   {
@@ -244,9 +195,9 @@ const tabsFastersData = ref<TabFastersData[]>([
     id: 'bastion',
     name: 'Бастион',
     data: [
-    { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
-    { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
-    { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+      { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+      { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
+      { id: 1, name: 'kekov', time: '15 м. 10 с.', reward: [] },
     ]
   },
   {
@@ -300,6 +251,14 @@ const changeFastersTab = (tab: any) => {
   border-radius: 24px;
   background: var(--color-primary);
   margin: 40px 0;
+
+  @include mq(laptop) {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    margin-top: 60px;
+  }
+
   .back {
     display: flex;
     align-items: center;
@@ -311,52 +270,76 @@ const changeFastersTab = (tab: any) => {
     top: 20px;
     cursor: pointer;
     transition: 0.3s ease;
+
     &:hover {
       translate: -5px;
     }
+
+    @include mq(laptop) {
+      top: -45px;
+      left: 15px;
+    }
   }
+
   .seasonRating-title {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .seasonRating-tables {
-    display: grid;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     align-items: flex-start;
     gap: 24px;
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
+    @include mq(laptop) {
+    
+    }
     .el-table .el-table__cell {
       padding: 2px 0;
     }
+
     .seasonRating-tables__item {
+      width: 100%;
       display: flex;
       gap: 16px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
       .subtitle {
         line-height: 28px;
       }
+
       .CustomTable {
         width: 100%;
       }
     }
+
     .rewards {
       display: flex;
       gap: 2px;
+
       img {
         width: 15px;
         height: 15px;
       }
     }
   }
+
   .seasonRating-shop {
     width: 100%;
     display: flex;
     gap: 16px;
     align-items: center;
     justify-content: space-between;
+
+    @include mq(desktop-medium) {
+      flex-direction: column;
+      text-align: center;
+    }
+
     .seasonRating-shop__info {
       width: 100%;
       max-width: 400px;
@@ -364,6 +347,7 @@ const changeFastersTab = (tab: any) => {
       flex-direction: column;
       justify-content: center;
       gap: 16px;
+
       .date {
         font-weight: 500;
         font-size: 16px;
@@ -383,10 +367,16 @@ const changeFastersTab = (tab: any) => {
         box-shadow: 0px 0px 10px 0px #67C9F729, 0px 0px 30px 0px #67C9F721 inset;
       }
     }
+
     .seasonRating-shop__items {
       display: grid;
       gap: 20px;
       grid-template-columns: repeat(4, 1fr);
+
+      @include mq(laptop) {
+        overflow: auto;
+        width: 100%;
+      }
     }
   }
 }

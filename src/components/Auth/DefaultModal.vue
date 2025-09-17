@@ -1,12 +1,6 @@
 <template>
-  <el-dialog
-    v-model="isVisible"
-    class="default-modal"
-    :width="width"
-    :before-close="handleClose"
-    :show-close="false"
-    center
-  >
+  <el-dialog v-model="isVisible" class="default-modal" :width="width" :before-close="handleClose" :show-close="false"
+    center>
     <template #header="{ close }">
       <div class="default-modal__header">
         <IconBase name="close" @click="close" />
@@ -35,11 +29,26 @@ const handleClose = () => {
 }
 </script>
 <style lang="scss">
+.el-overlay-dialog {
+  @include mq(laptop) {
+    top: initial !important;
+  }
+}
+
 .default-modal.el-dialog {
   padding: 16px 60px 56px;
   background: var(--color-primary);
   border-radius: 25px;
-  
+
+  @include mq(laptop) {
+    margin: 0;
+    width: 100%;
+    border-radius: 25px 25px 0 0;
+  }
+  @include mq(phone-430) {
+    padding: 16px 20px 40px;
+  }
+
   .el-dialog__header {
     position: relative;
     z-index: 3;
@@ -51,6 +60,7 @@ const handleClose = () => {
       cursor: pointer;
     }
   }
+
   .el-dialog__body {
     color: var(--color-white);
   }

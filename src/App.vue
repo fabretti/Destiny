@@ -11,7 +11,7 @@
   <ForgotPasswordModal v-model="showForgotPasswordModal" @success="handleForgotPasswordSuccess" />
 </template>
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { RouterView } from 'vue-router'
 import HeaderBlock from './components/HeaderBlock.vue'
@@ -37,18 +37,32 @@ const isAccountPage = computed(() => {
   return route.path.startsWith('/account')
 })
 
-
-
 const showFooter = computed(() => {
-  return isLoggedIn.value && !route.path.startsWith('/account')
+  return !route.path.startsWith('/account')
 })
 const shouldShowAsideMenu = computed(() => {
   return isLoggedIn.value && isAccountPage.value
 })
 
-// Инициализация авторизации при загрузке приложения
+// Функция для управления стилем элемента с id="app"
+const updateAppHeight = () => {
+  const appElement = document.getElementById('app')
+  if (appElement) {
+    if (isHomePage.value) {
+      appElement.style.height = '100vh'
+    } else {
+      appElement.style.height = ''
+    }
+  }
+}
+
 onMounted(() => {
   initAuth()
+  updateAppHeight()
+})
+
+watch(isHomePage, () => {
+  updateAppHeight()
 })
 
 const handleAuthSuccess = () => {
@@ -70,16 +84,19 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 main {
   position: relative;
   height: 100%;
   display: flex;
+
   &.with-aside {
     height: 718px;
     margin-top: 40px;
     gap: 26px;
   }
 }
+
 .bg-image {
   position: fixed;
   top: 0;

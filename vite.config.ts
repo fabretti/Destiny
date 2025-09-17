@@ -22,15 +22,14 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
-    open: true,
-    hmr: {
-      overlay: true,
-    },
-    watch: {
-      usePolling: true,
-    },
-  },
+		proxy: {
+			'/api': {
+				target: 'http://185.137.233.105:8081/',
+				changeOrigin: true,
+				autoRewrite: true,
+			},
+		},
+	},
   build: {
     outDir: 'dist',
     sourcemap: true,

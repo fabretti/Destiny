@@ -74,6 +74,10 @@ defineProps({
         background: var(--color-primary);
       }
     }
+    &--white {
+      border: 1px solid #CFF0FF45;
+      color: var(--color-white);
+    }
     &--empty {
       color: var(--color-primary-light);
       background: none;
@@ -83,7 +87,8 @@ defineProps({
       }
     }
     &--solid,
-    &--empty {
+    &--empty,
+    &--white {
       height: 44px;
       border-radius: 50px;
 
@@ -116,6 +121,10 @@ defineProps({
     &--icon-52 {
       height: 52px;
       width: 52px;
+      @include mq(laptop) {
+        width: 24px;
+        height: 24px;
+      }
     }
     &--icon-30 {
       height: 30px;
@@ -144,6 +153,11 @@ defineProps({
       letter-spacing: 1px;
       height: 50px;
       padding: 0 44px;
+      @include mq(laptop) {
+        font-size: 14px;
+        padding: 0 16px;
+        height: 40px;
+      }
     }
     &--big {
       font-weight: 700;
@@ -153,6 +167,11 @@ defineProps({
       text-transform: uppercase;
       height: 75px;
       padding: 0 60px;
+      @include mq(laptop) {
+        font-size: 16px;
+        padding: 0 16px;
+        height: 50px;
+      }
     }
   }
   &.color {

@@ -1,20 +1,20 @@
 <template>
-  <div class="vipInfo">
-    <div class="vipInfo-block">
-      <div class="vipInfo-block__title">Преимущества</div>
-      <div class="vipInfo-block__list">
-        <div v-for="benefit in benefits" :key="benefit.id" class="vipInfo-item">
-          <span class="vipInfo-item__name">{{ benefit.name }}</span>
-          <span class="vipInfo-item__value">{{ benefit.value }}</span>
+  <div class="vip-info">
+    <div class="vip-info-block">
+      <div class="vip-info-block__title">Преимущества</div>
+      <div class="vip-info-block__list">
+        <div v-for="benefit in benefits" :key="benefit.id" class="vip-info-item">
+          <span class="vip-info-item__name">{{ benefit.name }}</span>
+          <span class="vip-info-item__value">{{ benefit.value }}</span>
         </div>
       </div>
     </div>
-    <div class="vipInfo-block">
-      <div class="vipInfo-block__title">Команды</div>
-      <div class="vipInfo-block__list">
-        <div v-for="command in commands" :key="command.id" class="vipInfo-item">
-          <span class="vipInfo-item__name">{{ command.description }}</span>
-          <span class="vipInfo-item__value">{{ command.code }}</span>
+    <div class="vip-info-block">
+      <div class="vip-info-block__title">Команды</div>
+      <div class="vip-info-block__list">
+        <div v-for="command in commands" :key="command.id" class="vip-info-item">
+          <span class="vip-info-item__name">{{ command.description }}</span>
+          <span class="vip-info-item__value">{{ command.code }}</span>
         </div>
       </div>
     </div>
@@ -63,14 +63,17 @@ const commands = ref<VipCommand[]>([
 </script>
 
 <style lang="scss" scoped>
-.vipInfo {
+.vip-info {
   max-width: 415px;
   display: flex;
   flex-direction: column;
   gap: 40px;
-
-  .vipInfo-block {
-    .vipInfo-block__title {
+  @include mq(laptop) {
+    max-width: 100%;
+    width: 100%;
+  }
+  .vip-info-block {
+    .vip-info-block__title {
       font-size: 20px;
       font-weight: 400;
       letter-spacing: 1px;
@@ -78,7 +81,7 @@ const commands = ref<VipCommand[]>([
       margin-bottom: 20px;
     }
 
-    .vipInfo-block__list {
+    .vip-info-block__list {
       display: flex;
       flex-direction: column;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -87,7 +90,7 @@ const commands = ref<VipCommand[]>([
     }
   }
 
-  .vipInfo-item {
+  .vip-info-item {
     display: grid;
     grid-template-columns: 1fr auto;
     padding: 4px 20px;
@@ -98,14 +101,14 @@ const commands = ref<VipCommand[]>([
       border-bottom: none;
     }
 
-    .vipInfo-item__name {
+    .vip-info-item__name {
       color: var(--color-white);
       font-size: 16px;
       line-height: 24px;
       font-weight: 400;
     }
 
-    .vipInfo-item__value {
+    .vip-info-item__value {
       color: #67c9f7;
       font-size: 16px;
       font-weight: 600;
@@ -118,31 +121,30 @@ const commands = ref<VipCommand[]>([
   }
 }
 
-// Адаптивность
-@media (max-width: 768px) {
-  .vipInfo {
+@include mq(phone-430) {
+  .vip-info {
     gap: 30px;
 
-    .vipInfo-block {
-      &__title {
+    .vip-info-block {
+      .vip-info-block__title {
         font-size: 18px;
         margin-bottom: 16px;
       }
     }
 
-    .vipInfo-item {
-      padding: 12px 16px;
-      grid-template-columns: 1fr;
+    .vip-info-item {
+      padding: 6px 8px;
       gap: 8px;
 
-      &__name {
+      .vip-info-item__name {
         font-size: 14px;
       }
 
-      &__value {
+      .vip-info-item__value {
+        padding: 0;
         font-size: 14px;
-        justify-self: start;
         min-width: auto;
+        line-height: 24px;
       }
     }
   }

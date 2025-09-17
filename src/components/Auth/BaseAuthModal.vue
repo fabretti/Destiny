@@ -132,6 +132,9 @@ watch(activeTab, () => {
 <style lang="scss">
 .auth-modal.el-dialog {
   height: 670px;
+  @include mq(laptop) {
+    height: inherit;
+  }
   .el-dialog__body {
     height: 100%;
     display: flex;
@@ -145,7 +148,9 @@ watch(activeTab, () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    @include mq(laptop) {
+      max-width: 100%;
+    }
     .auth-tabs {
       width: 100%;
       display: flex;
@@ -206,7 +211,10 @@ watch(activeTab, () => {
         display: flex;
         flex-direction: column;
         gap: 30px;
-
+        @include mq(laptop) {
+          margin-bottom: 30px;
+          gap: 16px;
+        }
         .password-block {
           display: grid;
           gap: 16px;
@@ -248,12 +256,19 @@ watch(activeTab, () => {
     z-index: 2;
     width: 100%;
     max-width: 360px;
+    @include mq(laptop) {
+      display: none;
+      max-width: initial;
+    }
   }
 
   .auth-circle {
     position: absolute;
     right: 0;
     z-index: 1;
+    @include mq(laptop) {
+      display: none;
+    }
   }
 }
 </style>

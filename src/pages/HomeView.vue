@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <div class="home-block">
-      <IconBase name="logo" class="home-logo" />
+      <img src="@/assets/icons/logo.svg" alt="logo" class="home-logo" />
       <span class="home-version"> - 4.6 - </span>
       <span class="home-title">Уникальный сервер Aion с новым функционалом</span>
       <div class="home-btns">
-        <router-link to="/download">
+        <router-link to="/download" class="home-block__install">
           <ButtonItem variant="solid-shadow" size="big">Установить</ButtonItem>
         </router-link>
         <ButtonItem variant="empty" color="white" size="big" @click="openAuthModal">
@@ -29,6 +29,7 @@ const { openAuthModal } = useAuth()
   height: 100%;
   position: relative;
   z-index: 2;
+  overflow: hidden;
   &:before {
     content: '';
     position: absolute;
@@ -49,10 +50,22 @@ const { openAuthModal } = useAuth()
     padding-bottom: 100px;
     position: relative;
     z-index: 2;
+    @include mq(laptop) {
+      justify-content: center;
+      padding-bottom: 0;
+    }
+    .home-logo {
+      @include mq(laptop) {
+        height: 74px;
+      }
+    }
     .home-version {
       font-weight: 400;
       font-size: 45px;
       color: var(--color-brown);
+      @include mq(laptop) {
+        font-size: 16px;
+      }
     }
     .home-title {
       font-weight: 400;
@@ -60,6 +73,17 @@ const { openAuthModal } = useAuth()
       line-height: 100%;
       letter-spacing: 1px;
       margin: 16px 0 40px;
+      @include mq(laptop) {
+        max-width: 180px;
+        text-align: center;
+        font-size: 14px;
+        margin: 16px 0 20px;
+      }
+    }
+    .home-block__install {
+      @include mq(laptop) {
+        display: none;
+      }
     }
     .home-btns {
       display: flex;
@@ -70,9 +94,13 @@ const { openAuthModal } = useAuth()
   .home-bg {
     position: absolute;
     top: -30px;
-    left: 50%;
+    left: calc(50% + 38px);
     transform: translateX(-50%);
     z-index: 1;
+    @include mq(laptop) {
+      height: 420px;
+      top: 35px;
+    }
   }
 }
 </style>

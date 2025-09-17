@@ -45,6 +45,10 @@ const languages = [
     value: 'en',
     label: 'EN',
   },
+  {
+    value: 'ch',
+    label: '中文',
+  },
 ]
 
 const toggleDropdown = () => {

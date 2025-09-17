@@ -5,14 +5,11 @@
         <div class="vip-card-image">
           <img :src="tariff.image" :alt="tariff.title" />
         </div>
-        <h3 class="vip-card-title text-body-20">{{ tariff.title }}</h3>
-        <div class="vip-card-price">{{ tariff.price }} T</div>
-        <ButtonItem
-          variant="solid-shadow"
-          size="medium"
-          class="vip-card-button"
-          @click="handleBuy(tariff.id)"
-        >
+        <div class="vip-card-content">
+          <h3 class="vip-card-title text-body-20">{{ tariff.title }}</h3>
+          <div class="vip-card-price">{{ tariff.price }} T</div>
+        </div>
+        <ButtonItem variant="solid-shadow" size="medium" class="vip-card-button" @click="handleBuy(tariff.id)">
           КУПИТЬ
         </ButtonItem>
       </div>
@@ -64,6 +61,10 @@ const handleBuy = (tariffId: number) => {
 
 <style lang="scss" scoped>
 .vip-tariffs {
+  @include mq(laptop) {
+    width: 100%;
+  }
+
   .vip-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -78,7 +79,7 @@ const handleBuy = (tariffId: number) => {
       text-align: center;
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
-
+      padding: 18px;
       &:hover {
         transform: translateY(-5px);
         box-shadow:
@@ -87,13 +88,15 @@ const handleBuy = (tariffId: number) => {
       }
 
       .vip-card-image {
-        margin-bottom: 20px;
-
         img {
           width: 120px;
           height: auto;
           object-fit: contain;
           filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+
+          @include mq(laptop) {
+            width: 90px;
+          }
         }
       }
 
@@ -108,6 +111,9 @@ const handleBuy = (tariffId: number) => {
 
         color: var(--color-white);
         margin-bottom: 24px;
+        @include mq(laptop) {
+          font-size: 24px;
+        }
       }
 
       .vip-card-button {
@@ -116,26 +122,37 @@ const handleBuy = (tariffId: number) => {
       }
     }
   }
+
   &.large {
     .vip-cards .vip-card .vip-card-image img {
       width: 250px;
     }
   }
+
   &.small {
     .vip-cards {
       display: flex;
       flex-direction: column;
     }
+
     .vip-card {
       height: 116px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .vip-card-image, .vip-card-title, .vip-card-price, .vip-card-button {
+
+      .vip-card-image,
+      .vip-card-title,
+      .vip-card-price,
+      .vip-card-button {
         margin: 0;
       }
+
       .vip-card-button {
         width: 150px;
+        @include mq(laptop) {
+          width: 100px;
+        }
       }
     }
   }

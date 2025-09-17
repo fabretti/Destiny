@@ -5,61 +5,39 @@
     </div>
     <div class="rating-title">
       <h1 class="text-uppercase">Рейтинг башни испытаний</h1>
-      <div class="text-body-18 mt-4">Обнуление и выдача наград через: 
-        <span class="text-underline">23 дня 14 часов</span></div>
+      <div class="text-body-18 mt-4">Обнуление и выдача наград через:
+        <span class="text-underline">23 дня 14 часов</span>
+      </div>
     </div>
     <div class="rating-table">
-      <el-tabs v-model="activeTab" type="card"  @tab-click="changeTab">
-        <el-tab-pane 
-          v-for="tab in tabsData" 
-          :key="tab.id"
-          :label="tab.name" 
-          :name="tab.id"
-        >
+      <el-tabs v-model="activeTab" type="card" @tab-click="changeTab">
+        <el-tab-pane v-for="tab in tabsData" :key="tab.id" :label="tab.name" :name="tab.id">
           <div class="CustomTable">
             <el-table :data="currentTabData" max-height="600">
-              <el-table-column
-                type="index"
-                label="#"
-                width="50"
-              >
+              <el-table-column type="index" label="#" width="50">
               </el-table-column>
-              <el-table-column
-                prop="name"
-                label="Никнейм"
-              >
+              <el-table-column prop="name" label="Никнейм">
                 <template #default="{ row }">
                   <div>{{ row.name }}</div>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="floor"
-                label="Этаж"
-              >
+              <el-table-column prop="floor" label="Этаж">
                 <template #default="{ row }">
                   <div>{{ row.floor }}</div>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="totalFloors"
-                label="Всего этажей"
-              >
+              <el-table-column prop="totalFloors" label="Всего этажей">
                 <template #default="{ row }">
                   <div>{{ row.totalFloors }}</div>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="time"
-                label="Время"
-              >
+              <el-table-column prop="time" label="Время">
                 <template #default="{ row }">
-                  <div>{{ row.time }} <span v-if="row.time_minus" class="color-brown">({{ row.time_minus }})</span></div>
+                  <div>{{ row.time }} <span v-if="row.time_minus" class="color-brown">({{ row.time_minus }})</span>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="reward"
-                label="Награда"
-              >
+              <el-table-column prop="reward" label="Награда">
                 <template #default="{ row }">
                   <div class="rewards">
                     <img v-for="item in 3" src="@/assets/img/item.png" alt="reward" class="reward-item" />
@@ -134,13 +112,6 @@ const tabsData = ref<TabData[]>([
       { id: 1, name: 'TowerDefender', floor: '28', totalFloors: '35', time: '07:30', time_minus: '-03:20', reward: [] },
       { id: 2, name: 'ShieldMaster', floor: '27', totalFloors: '35', time: '08:15', time_minus: '-02:35', reward: [] },
       { id: 3, name: 'GuardianAngel', floor: '26', totalFloors: '35', time: '09:45', time_minus: '-01:05', reward: [] },
-      { id: 4, name: 'FortressKeeper', floor: '25', totalFloors: '35', time: '10:50', time_minus: null, reward: [] },
-      { id: 5, name: 'WallBreaker', floor: '24', totalFloors: '35', time: '11:25', time_minus: null, reward: [] },
-      { id: 6, name: 'BastionLord', floor: '23', totalFloors: '35', time: '12:40', time_minus: null, reward: [] },
-      { id: 7, name: 'CitadelGuard', floor: '22', totalFloors: '35', time: '13:55', time_minus: null, reward: [] },
-      { id: 8, name: 'RampartKnight', floor: '21', totalFloors: '35', time: '14:30', time_minus: null, reward: [] },
-      { id: 9, name: 'StrongholdHero', floor: '20', totalFloors: '35', time: '15:45', time_minus: null, reward: [] },
-      { id: 10, name: 'CastleWarden', floor: '19', totalFloors: '35', time: '16:20', time_minus: null, reward: [] },
     ]
   }
 ])
@@ -172,6 +143,14 @@ const changeTab = (tab: any) => {
   border-radius: 24px;
   background: var(--color-primary);
   margin: 40px 0;
+
+  @include mq(laptop) {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    margin-top: 60px;
+  }
+
   .back {
     display: flex;
     align-items: center;
@@ -183,15 +162,25 @@ const changeTab = (tab: any) => {
     top: 20px;
     cursor: pointer;
     transition: 0.3s ease;
+
     &:hover {
       translate: -5px;
     }
+
+    @include mq(laptop) {
+      top: -45px;
+      left: 15px;
+    }
+
   }
+
   .rating-table {
     width: 100%;
+
     .rewards {
       display: flex;
       gap: 2px;
+
       img {
         width: 15px;
         height: 15px;

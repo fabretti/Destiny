@@ -53,7 +53,6 @@ import ButtonItem from '@/shared/ButtonItem.vue'
 import { formatCurrency } from '@/utils/formatters'
 import Divider from '@/components/Divider.vue'
 
-// Тип для приза
 interface Prize {
   name: string
   image: string
@@ -72,12 +71,10 @@ const prizes = ref<Prize[]>([
   { name: 'VIP 30 дней', image: '/src/assets/img/price.png', probability: 1 }
 ])
 
-// Состояние рулетки
 const isSpinning = ref(false)
 const arrowRotation = ref(0)
 const selectedPrize = ref<Prize | null>(null)
 
-// Функция выбора приза на основе вероятностей
 const selectPrizeByProbability = (): Prize => {
   const random = Math.random() * 100 // Случайное число от 0 до 100
   let cumulativeProbability = 0

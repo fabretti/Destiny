@@ -11,9 +11,11 @@
   padding: 0;
   margin: 0;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body,
 textarea,
 button,
@@ -21,6 +23,7 @@ input {
   font-family: var(--font-family-base);
   font-size: 18px;
 }
+
 button {
   cursor: pointer;
   user-select: none;
@@ -28,6 +31,7 @@ button {
   outline: none;
   background: inherit;
 }
+
 ul li {
   list-style: none;
 }
@@ -42,14 +46,25 @@ body {
   background: rgba(9, 23, 39, 1);
   color: var(--color-white);
 }
-
+html {
+  @include mq(laptop) {
+    height: 100%;
+  }
+}
 body,
 html,
 #app,
 .default {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+main {
+  flex: 1 1 auto;
+  @include mq(laptop) {
+    background: #263849D9;
+  }
 }
 
 .main-container {
@@ -57,10 +72,10 @@ html,
   height: 100%;
   width: 100%;
   max-width: 1340px;
-  padding: 0 30px;
+  padding: 0 15px;
   margin: 0 auto;
   z-index: 3;
-  
+
 }
 
 footer {
@@ -68,4 +83,9 @@ footer {
   text-align: center;
   padding: 20px 0;
   z-index: 2;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s !important;
 }

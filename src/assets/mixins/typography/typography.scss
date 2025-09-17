@@ -28,6 +28,9 @@
   font-size: 20px;
   line-height: 100%;
   letter-spacing: 2px;
+  @include mq(laptop) {
+    font-size: 16px;
+  }
 }
 @mixin text-body-18 {
   font-weight: 300;

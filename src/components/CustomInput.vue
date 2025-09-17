@@ -1,13 +1,7 @@
 <template>
   <div class="custom-input-group" :class="color, size">
-    <input
-      :value="modelValue"
-      :type="type"
-      :placeholder="placeholder"
-      class="custom-input"
-      @input="handleInput"
-      @keydown="handleKeydown"
-    />
+    <input :value="modelValue" :type="type" :placeholder="placeholder" class="custom-input" @input="handleInput"
+      @keydown="handleKeydown" />
     <IconBase v-if="search" name="search" size="24" class="custom-input-icon" />
     <div v-if="balance" class="custom-input-toll text-uppercase">toll</div>
   </div>
@@ -47,12 +41,12 @@ const handleKeydown = (event: KeyboardEvent) => {
       'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
       'Home', 'End'
     ]
-    
+
     // Разрешаем Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+Z
     if (event.ctrlKey && ['a', 'c', 'v', 'x', 'z'].includes(event.key.toLowerCase())) {
       return
     }
-    
+
     // Блокируем все остальные символы, кроме цифр и разрешенных клавиш
     if (!allowedKeys.includes(event.key) && !/^[0-9]$/.test(event.key)) {
       event.preventDefault()
@@ -63,12 +57,12 @@ const handleKeydown = (event: KeyboardEvent) => {
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   let value = target.value
-  
+
   // Если это поле для ввода суммы (balance), разрешаем только цифры
   if (props.balance) {
     value = value.replace(/[^0-9]/g, '')
   }
-  
+
   emit('update:modelValue', value as string | number | null)
 }
 </script>
@@ -76,7 +70,7 @@ const handleInput = (event: Event) => {
 <style scoped lang="scss">
 .custom-input-group {
   position: relative;
-  
+
   .custom-input {
     height: 46px;
     width: 100%;
@@ -106,6 +100,7 @@ const handleInput = (event: Event) => {
       color: #747D86;
     }
   }
+
   &.sm {
     .custom-input {
       font-size: 12px;
@@ -114,6 +109,7 @@ const handleInput = (event: Event) => {
       border-radius: 6px;
     }
   }
+
   &.md {
     .custom-input {
       font-size: 14px;
@@ -122,6 +118,7 @@ const handleInput = (event: Event) => {
       border-radius: 6px;
     }
   }
+
   .custom-input-toll {
     @include text-body-12;
     position: absolute;
@@ -130,6 +127,7 @@ const handleInput = (event: Event) => {
     transform: translateY(-50%);
     color: #293A4A;
   }
+
   .custom-input-icon {
     position: absolute;
     right: 18px;

@@ -66,6 +66,10 @@ const inputType = computed(() => {
     line-height: 100%;
     outline: none;
     transition: border 0.2s;
+    @include mq(laptop) {
+      height: 40px;
+      border-radius: 12px;
+    }
 
     &:focus {
       border: 1.5px solid rgb(103, 124, 149);

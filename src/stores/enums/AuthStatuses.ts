@@ -1,0 +1,33 @@
+/**
+ * Enum для статусов авторизации
+ */
+export enum AuthStatus {
+  SUCCESS = 'SUCCESS',
+  BAD_LOGIN_OR_PASSWORD = 'BAD_LOGIN_OR_PASSWORD',
+  BAD_LOGIN = 'BAD_LOGIN',
+  BAD_PASSWORD = 'BAD_PASSWORD',
+  BAD_EMAIL = 'BAD_EMAIL',
+  ACCOUNT_ALREADY_EXISTS = 'ACCOUNT_ALREADY_EXISTS',
+  EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
+  BAD_REFRESH_TOKEN = 'BAD_REFRESH_TOKEN'
+}
+
+/**
+ * Enum для статусов регистрации
+ */
+export enum RegisterStatus {
+  SUCCESS = 'SUCCESS',
+  BAD_LOGIN = 'BAD_LOGIN',
+  BAD_PASSWORD = 'BAD_PASSWORD',
+  BAD_EMAIL = 'BAD_EMAIL',
+  ACCOUNT_ALREADY_EXISTS = 'ACCOUNT_ALREADY_EXISTS',
+  EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS'
+}
+
+/**
+ * Enum для статусов обновления токена
+ */
+export enum RefreshStatus {
+  SUCCESS = 'SUCCESS',
+  BAD_REFRESH_TOKEN = 'BAD_REFRESH_TOKEN'
+}

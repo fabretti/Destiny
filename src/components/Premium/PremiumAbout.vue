@@ -9,7 +9,7 @@
     </div>
     <div class="premium-about__content">
       <VipInfoBlock />
-      <VipTariffs size="large" />
+      <VipTariffs :size="isMobile ? 'small' : 'large'" />
     </div>
   </div>
 </template>
@@ -18,6 +18,9 @@ import IconBase from '@/shared/IconBase.vue'
 import VipTariffs from './VipTariffs.vue'
 import VipInfoBlock from './VipInfoBlock.vue'
 import { useRouter } from 'vue-router'
+import { useScreenSize } from '@/composables/useScreenSize'
+
+const { isMobile } = useScreenSize();
 
 const router = useRouter()
 
@@ -36,6 +39,12 @@ const handleBack = () => {
   padding: 32px 46px 46px;
   border-radius: 24px;
   background: var(--color-primary);
+
+  @include mq(laptop) {
+    background: inherit;
+    padding: 0;
+  }
+
   .back {
     display: flex;
     align-items: center;
@@ -47,14 +56,24 @@ const handleBack = () => {
     top: 20px;
     cursor: pointer;
     transition: 0.3s ease;
+
     &:hover {
       translate: -5px;
     }
+
+    @include mq(laptop) {
+      display: none;
+    }
   }
+
   .premium-about__header {
     display: grid;
     text-align: center;
     gap: 20px;
+
+    @include mq(laptop) {
+      gap: 12px;
+    }
   }
 
   .premium-about__content {
@@ -63,31 +82,20 @@ const handleBack = () => {
     gap: 60px;
     align-items: start;
     width: 100%;
+
+    @include mq(laptop) {
+      display: flex;
+      flex-direction: column-reverse;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
   }
 
   .vip-tariffs {
     margin-top: 42px;
     height: 100%;
-  }
-}
-
-// Адаптивность
-@media (max-width: 1024px) {
-  .premium-about {
-    .premium-about__content {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .premium-about {
-    padding: 20px;
-    gap: 30px;
-
-    .premium-about__content {
-      gap: 30px;
+    @include mq(laptop) {
+      margin-top: 0;
     }
   }
 }

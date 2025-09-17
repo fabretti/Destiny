@@ -1,55 +1,31 @@
 <template>
-  <BaseAuthModal
-    v-model="showAuthModal"
-    :tabs="tabs"
-    :form="form"
-    :errors="errors"
-    :loading="isLoading"
-    @submit="handleSubmit"
-    @tab-change="handleTabChange"
-    @close="handleClose"
-  >
+  <BaseAuthModal v-model="showAuthModal" :tabs="tabs" :form="form" :errors="errors" :loading="isLoading"
+    @submit="handleSubmit" @tab-change="handleTabChange" @close="handleClose">
     <template #default="{ activeTab, form, errors }">
       <AuthInput v-model="form.login" type="text" placeholder="Логин" :error="errors.login" />
-      <AuthInput
-        v-if="activeTab === 'register'"
-        v-model="form.email"
-        type="email"
-        placeholder="Email"
-        :error="errors.email"
-      />
+      <AuthInput v-if="activeTab === 'register'" v-model="form.email" type="email" placeholder="Email"
+        :error="errors.email" />
       <div class="password-block">
-        <AuthInput
-          v-model="form.password"
-          type="password"
-          placeholder="Пароль"
-          :show-password="activeTab === 'login' ? showLoginPassword : showRegisterPassword"
-          :error="errors.password"
+        <AuthInput v-model="form.password" type="password" placeholder="Пароль"
+          :show-password="activeTab === 'login' ? showLoginPassword : showRegisterPassword" :error="errors.password"
           @toggle-password="
             activeTab === 'login'
               ? (showLoginPassword = !showLoginPassword)
               : (showRegisterPassword = !showRegisterPassword)
-          "
-        />
+            " />
         <div v-if="activeTab === 'login'" class="password-block-forgot">
           <p class="text-link color-white" @click="openForgotPasswordModal">Забыли пароль?</p>
         </div>
       </div>
-      <AuthInput
-        v-if="activeTab === 'register'"
-        v-model="form.repeatPassword"
-        type="password"
-        placeholder="Повторите пароль"
-        :show-password="showRegisterRepeat"
-        :error="errors.repeatPassword"
-        @toggle-password="showRegisterRepeat = !showRegisterRepeat"
-      />
+      <AuthInput v-if="activeTab === 'register'" v-model="form.repeatPassword" type="password"
+        placeholder="Повторите пароль" :show-password="showRegisterRepeat" :error="errors.repeatPassword"
+        @toggle-password="showRegisterRepeat = !showRegisterRepeat" />
     </template>
   </BaseAuthModal>
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus';
 import { useAuth } from '@/composables/useAuth'
 import AuthInput from '@/components/AuthInput.vue'
 import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
@@ -95,7 +71,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-const { login, showAuthModal, closeAuthModal, openForgotPasswordModal, isLoading } = useAuth()
+const { login, register, showAuthModal, closeAuthModal, openForgotPasswordModal, isLoading, error } = useAuth()
 
 const validateLogin = (value: string): string => {
   if (!value.trim()) return 'Логин обязателен'
@@ -180,37 +156,55 @@ const handleSubmit = async (activeTab: string, formData: Record<string, any>) =>
 const handleLogin = async (formData: Record<string, any>) => {
   try {
     const success = await login({
-      username: formData.login,
+      login: formData.login,
       password: formData.password,
     })
 
     if (success) {
       emit('success')
     } else {
-      errors.value.login = 'Неверный логин или пароль'
+      // Показываем ошибку из store или общую ошибку
+      errors.value.login = error.value || 'Неверный логин или пароль'
     }
-  } catch (error) {
-    console.error('Ошибка авторизации:', error)
-    errors.value.login = 'Ошибка авторизации'
+  } catch (err) {
+    console.error('Ошибка авторизации:', err)
+    errors.value.login = error.value || 'Ошибка авторизации'
   }
 }
 
 const handleRegister = async (formData: Record<string, any>) => {
   try {
-    // Для регистрации пока просто авторизуем с введенными данными
-    const success = await login({
-      username: formData.login,
+    const success = await register({
+      login: formData.login,
       password: formData.password,
+      email: formData.email,
     })
 
     if (success) {
       emit('success')
     } else {
-      errors.value.login = 'Ошибка регистрации'
+      // Показываем конкретную ошибку из store
+      const errorMessage = error.value || 'Ошибка регистрации'
+      ElNotification({
+        title: 'Ошибка',
+        message: errorMessage,
+        type: 'error',
+      });
+
+      // Определяем, к какому полю относится ошибка
+      if (errorMessage.includes('логин') || errorMessage.includes('логином')) {
+        errors.value.login = errorMessage
+      } else if (errorMessage.includes('пароль') || errorMessage.includes('паролем')) {
+        errors.value.password = errorMessage
+      } else if (errorMessage.includes('email') || errorMessage.includes('почт')) {
+        errors.value.email = errorMessage
+      } else {
+        errors.value.login = errorMessage
+      }
     }
-  } catch (error) {
-    console.error('Ошибка регистрации:', error)
-    errors.value.login = 'Ошибка регистрации'
+  } catch (err) {
+    console.error('Ошибка регистрации:', err)
+    errors.value.login = error.value || 'Ошибка регистрации'
   }
 }
 
@@ -226,5 +220,4 @@ const handleClose = () => {
 </script>
 
 <style lang="scss">
-// Стили теперь находятся в BaseAuthModal.vue
-</style>
+// Стили теперь находятся в BaseAuthModal.vue</style>

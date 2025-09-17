@@ -1,10 +1,10 @@
 <template>
-  <div class="account wrapper-block">
+  <div v-loading="isLoading" class="account wrapper-block">
     <div class="account-section">
 
       <div class="account-block info">
         <div class="info-header">
-          <div class="text-body-24 text-uppercase">LOUNDd</div>
+          <div class="text-body-24 text-uppercase">{{ lkStore.accountInfo?.login }}</div>
           <ButtonItem size="icon-30" @click="openForgotPasswordModal">
             <IconBase name="settings" />
           </ButtonItem>
@@ -92,9 +92,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { formatCurrency } from '@/utils/formatters'
 import { useAuth } from '@/composables/useAuth'
+import { useLkStore } from '@/stores/LkStore'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import IconBase from '@/shared/IconBase.vue'
@@ -103,6 +104,7 @@ import StatisticModal from '@/components/StatisticModal.vue'
 import DepositModal from '@/components/DepositModal.vue'
 
 const { openForgotPasswordModal } = useAuth()
+const lkStore = useLkStore()
 
 const promocode = ref('')
 const sumToPay = ref(null)
@@ -150,6 +152,22 @@ const openDepositModal = () => {
   }
   isDepositModalVisible.value = true
 }
+
+const isLoading = ref(false)
+const getAccountInfo = async () => {
+  isLoading.value = true
+  try {
+    lkStore.accountInfo = await lkStore.getAccountInfo()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(async () => {
+  await getAccountInfo()
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,8 +1,6 @@
 <template>
   <div class="premium-view">
-    <div class="main-container">
-      <PremiumAbout />
-    </div>
+    <PremiumAbout />
   </div>
 </template>
 

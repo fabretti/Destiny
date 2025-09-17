@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@/stores/authStore'
+import { useAuthStore } from '@/stores/AuthStore'
 
 export function useAuth() {
   const authStore = useAuthStore()
@@ -27,8 +27,15 @@ export function useAuth() {
 
     // Действия авторизации
     login: authStore.login,
+    register: authStore.register,
     logout: authStore.logout,
     initAuth: authStore.initAuth,
+    refreshAccessToken: authStore.refreshAccessToken,
+
+    // API методы (если нужны напрямую)
+    apiLogin: authStore.apiLogin,
+    apiRegister: authStore.apiRegister,
+    apiRefreshToken: authStore.apiRefreshToken,
 
     // Действия модальных окон
     openAuthModal: authStore.openAuthModal,
