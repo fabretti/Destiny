@@ -1,40 +1,38 @@
 <template>
   <div class="roulette">
+    <div class="roulette-title">
+      <h2>Колесо фортуны</h2>
+      <BalanceDisplay :value="5000" currency="TOLL" />
+    </div>
     <div class="roulette-content">
       <div class="roulette-content__spin">
-        <!-- Секторы рулетки -->
-        <div class="roulette-sectors">
-          <div v-for="(prize, index) in prizes" :key="`sector-${index}`" class="sector" :style="{
-            transform: `rotate(${index * 40}deg)`
-          }"></div>
-        </div>
-
-        <div class="block-prices">
-          <div v-for="(prize, index) in prizes" :key="index" class="price-item">
-            <img :src="prize.image" :alt="prize.name" class="price-img" />
+        <!-- Колесо рулетки -->
+        <div ref="wheelElement" class="wheel" :style="{ transform: `rotate(${wheelRotation}rad)` }">
+          <div v-for="(item, index) in itemsWheel" :key="index" class="itemWheel" :style="item.style">
+            <img :src="item.image.url" :alt="item.image.name" class="itemWheel-img" />
           </div>
         </div>
-        <img src="@/assets/img/roulette/strelka.png" alt="strelka" class="arrow" :class="{ spinning: isSpinning }"
-          :style="{ transform: `rotate(${arrowRotation}deg)` }" />
+        <img src="@/assets/img/roulette/strelka.png" alt="strelka" class="arrow" />
       </div>
       <div class="roulette-content__info">
         <div class="result">
-          <div class="result-price">
-            <img v-if="selectedPrize" :src="selectedPrize.image" :alt="selectedPrize.name" class="prize-image" />
-          </div>
-          <ButtonItem variant="solid-shadow" size="medium">ПОЛУЧИТЬ</ButtonItem>
-          <div class="text-body-12 text-center">Подарок придет на почту персонажа</div>
-        </div>
-        <Divider variant="vertical" />
-        <div class="actions">
-          <div class="text-body-16 text-center">
+          <div class="result-time text-body-16 text-center">
             До конца акции:<br />
             <span>00 : 00 : 00 : 00</span>
           </div>
-          <div class="text-body-14 mt-auto">Баланс:</div>
-          <div class="actions-balance">
-            {{ formatCurrency(5000, 'TOLL') }}
+          <div class="result-price">
+            <img v-if="selectedPrize" :src="selectedPrize.image" :alt="selectedPrize.name" class="prize-image" />
           </div>
+          <ButtonItem variant="solid" size="medium">ПОЛУЧИТЬ</ButtonItem>
+          <div class="result-help text-body-12 text-center">Подарок придет на почту персонажа</div>
+        </div>
+        <Divider variant="vertical" />
+        <div class="actions">
+          <div class="actions-time text-body-16 text-center">
+            До конца акции:<br />
+            <span>00 : 00 : 00 : 00</span>
+          </div>
+          <BalanceDisplay :value="5000" currency="TOLL" />
           <div class="actions-btn">
             <ButtonItem variant="solid-shadow" size="medium" :disabled="isSpinning" @click="spinRoulette">
               Крутить
@@ -42,109 +40,215 @@
             <div class="text-body-12">1 попытка = {{ formatCurrency(50, 'TOLL') }}</div>
           </div>
         </div>
+        <div class="back" @click="handleBack">
+          <IconBase name="close" />
+        </div>
       </div>
       <img src="@/assets/img/roulette/roulette.png" alt="roulette" class="roulette-img" />
+      <img src="@/assets/img/roulette/rouletteMobile.png" alt="roulette" class="roulette-img-mobile" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import { formatCurrency } from '@/utils/formatters'
 import Divider from '@/components/Divider.vue'
+import IconBase from '@/shared/IconBase.vue'
+import BalanceDisplay from '@/components/BalanceDisplay.vue'
+import { useRouter } from 'vue-router'
+import { useScreenSize } from '@/composables/useScreenSize'
 
-interface Prize {
+const router = useRouter()
+const { isDesktop } = useScreenSize()
+
+interface IPrize {
   name: string
   image: string
+  url: string
   probability: number
 }
 
-const prizes = ref<Prize[]>([
-  { name: '100 монет', image: '/src/assets/img/price.png', probability: 92 },
-  { name: '200 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: '500 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: '1000 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: '2000 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: '5000 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: '10000 монет', image: '/src/assets/img/price.png', probability: 1 },
-  { name: 'VIP 7 дней', image: '/src/assets/img/price.png', probability: 1 },
-  { name: 'VIP 30 дней', image: '/src/assets/img/price.png', probability: 1 }
+interface IItemWheel {
+  element: HTMLElement | null
+  cos: number
+  sin: number
+  image: IPrize
+  style: string
+}
+
+const prizes = ref<IPrize[]>([
+  { name: '100 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 92 },
+  { name: '200 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: '500 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: '1000 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: '2000 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: '5000 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: '10000 монет', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: 'VIP 7 дней', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 },
+  { name: 'VIP 30 дней', image: '/src/assets/img/price.png', url: '/src/assets/img/price.png', probability: 1 }
 ])
 
-const isSpinning = ref(false)
-const arrowRotation = ref(0)
-const selectedPrize = ref<Prize | null>(null)
 
-const selectPrizeByProbability = (): Prize => {
-  const random = Math.random() * 100 // Случайное число от 0 до 100
+const handleBack = () => {
+  router.push('/')
+}
+
+const wheelElement = ref<HTMLElement | null>(null)
+const wheelRotation = ref(0)
+const isSpinning = ref(false)
+const selectedPrize = ref<IPrize | null>(null)
+const itemsWheel = ref<IItemWheel[]>([])
+
+const minImagesToSpin = 30
+const maxImagesToSpin = 50
+const duration = 6000
+
+const state = ref({
+  radiansToSpin: 0,
+  step: 0,
+  spinnedRadiansCount: 0,
+  spinnedImagesCount: 0,
+  frameID: 0,
+  startSpinTime: 0,
+  isSpinned: false
+})
+
+let spinResult: IPrize | null = null
+
+const easeInOutCubic = (t: number): number => {
+  return Math.sqrt(1 - Math.pow(t - 1, 2))
+}
+
+const fillWheel = () => {
+  if (!wheelElement.value) return
+
+  itemsWheel.value = []
+  state.value.step = Math.PI * 2 / prizes.value.length
+
+  prizes.value.forEach((prize, index) => {
+    const angle = -Math.PI / 2 + state.value.step * index
+
+    itemsWheel.value.push({
+      element: null,
+      cos: Math.cos(angle),
+      sin: Math.sin(angle),
+      image: prize,
+      style: ''
+    })
+  })
+
+  nextTick(() => {
+    resizeCircles()
+  })
+}
+
+const dynamicWheelSize = computed(() => {
+  return isDesktop.value ? 560 : 340
+})
+
+const resizeCircles = () => {
+  if (!wheelElement.value) return
+
+  itemsWheel.value.forEach((item, i) => {
+    const x = item.cos * dynamicWheelSize.value / 3
+    const y = item.sin * dynamicWheelSize.value / 3
+
+    item.style = `transform: translate(${x}px, ${y}px) rotate(${state.value.step * i}rad)`
+  })
+}
+
+const selectPrizeByProbability = (): IPrize => {
+  const random = Math.random() * 100
   let cumulativeProbability = 0
+
+  console.log('🎲 Случайное число:', random.toFixed(2))
 
   for (const prize of prizes.value) {
     cumulativeProbability += prize.probability
+    console.log(`📊 ${prize.name}: накопленная вероятность ${cumulativeProbability.toFixed(2)}%`)
     if (random <= cumulativeProbability) {
+      console.log(`🎉 Выбран приз: ${prize.name}`)
       return prize
     }
   }
 
-  // Если что-то пошло не так, возвращаем первый приз
+  console.log('⚠️ Возвращаем первый приз по умолчанию')
   return prizes.value[0]
 }
 
-// Функция определения приза по углу стрелки
-const getPrizeByAngle = (angle: number): Prize => {
-  // Нормализуем угол к диапазону 0-360
-  const normalizedAngle = ((angle % 360) + 360) % 360
+const startSpin = () => {
+  if (state.value.isSpinned) return
 
-  // Вычисляем индекс приза (каждый приз занимает 40 градусов)
-  // Смещаем на 20 градусов, чтобы стрелка указывала на центр сектора
-  const prizeIndex = Math.floor((normalizedAngle + 20) / 40) % prizes.value.length
-
-  return prizes.value[prizeIndex]
-}
-
-// Функция выбора приза с учетом вероятностей
-const selectPrizeWithProbability = (): { prize: Prize, angle: number } => {
-  // Сначала выбираем приз по вероятности
-  const chosenPrize = selectPrizeByProbability()
-  const prizeIndex = prizes.value.findIndex(prize => prize === chosenPrize)
-
-  // Вычисляем базовый угол для этого приза
-  const baseAngle = prizeIndex * 40
-
-  // Добавляем случайное смещение в пределах сектора (±20 градусов)
-  const randomOffset = (Math.random() - 0.5) * 40
-  const finalAngle = baseAngle + randomOffset
-
-  return { prize: chosenPrize, angle: finalAngle }
-}
-
-const spinRoulette = () => {
-
-  if (isSpinning.value) return
-
+  state.value.isSpinned = true
   isSpinning.value = true
   selectedPrize.value = null
 
-  // Выбираем приз с учетом вероятностей и получаем финальный угол
-  const { prize: chosenPrize, angle: targetAngle } = selectPrizeWithProbability()
+  const chosenPrize = selectPrizeByProbability()
+  const prizeIndex = prizes.value.findIndex(prize => prize === chosenPrize)
 
-  // Добавляем несколько полных оборотов для эффекта вращения
-  const fullRotations = 5 + Math.random() * 3 // 5-8 полных оборотов
-  const finalRotation = fullRotations * 360 + targetAngle
+  const fullRotations = Math.floor(minImagesToSpin + Math.random() * maxImagesToSpin)
+  const targetPosition = fullRotations + prizeIndex
 
-  arrowRotation.value = finalRotation
+  state.value.spinnedRadiansCount += state.value.radiansToSpin
+  state.value.radiansToSpin = state.value.step * targetPosition
+  state.value.spinnedImagesCount += targetPosition
 
-  // Завершаем вращение через 3 секунды
-  setTimeout(() => {
-    isSpinning.value = false
+  spinResult = chosenPrize
 
-    // Определяем приз по финальному углу стрелки
-    const finalAngle = finalRotation % 360
-    const actualPrize = getPrizeByAngle(finalAngle)
-    selectedPrize.value = actualPrize
-    arrowRotation.value = 0
-  }, 3000)
+  state.value.startSpinTime = Date.now()
+  state.value.frameID = requestAnimationFrame(tick)
 }
+
+const stopSpin = () => {
+  spin(1)
+  cancelAnimationFrame(state.value.frameID)
+
+  state.value.isSpinned = false
+  isSpinning.value = false
+
+  if (spinResult) {
+    selectedPrize.value = spinResult
+  }
+}
+
+const tick = () => {
+  const now = Date.now()
+  const t = (now - state.value.startSpinTime) / 1000 / (duration / 1000)
+  const et = easeInOutCubic(t)
+
+  if (t >= 1) {
+    stopSpin()
+    return
+  }
+
+  spin(et)
+  state.value.frameID = requestAnimationFrame(tick)
+}
+
+const spin = (t: number) => {
+  wheelRotation.value = state.value.spinnedRadiansCount + t * state.value.radiansToSpin
+}
+
+const handleResize = () => {
+  resizeCircles()
+}
+
+const spinRoulette = () => {
+  startSpin()
+}
+
+onMounted(() => {
+  fillWheel()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  if (state.value.frameID) {
+    cancelAnimationFrame(state.value.frameID)
+  }
+})
 </script>
 <style lang="scss">
 .roulette {
@@ -154,13 +258,39 @@ const spinRoulette = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 26px;
   margin-top: 80px;
+
+  .roulette-title {
+    display: none;
+
+    @include mq(laptop) {
+      display: block;
+    }
+
+    .balance-display {
+      display: none;
+
+      @include mq(laptop) {
+        display: flex;
+        margin-top: 12px;
+      }
+    }
+  }
 
   .roulette-content {
     position: relative;
     display: flex;
     align-items: center;
     width: 1121px;
+
+    @include mq(laptop) {
+      flex-direction: column;
+      width: auto;
+      padding-bottom: 20px;
+      border-radius: 20px;
+      border: 1px solid #31445B;
+    }
 
     .roulette-content__spin {
       width: 628px;
@@ -171,85 +301,38 @@ const spinRoulette = () => {
       z-index: 2;
       position: relative;
 
-      .roulette-sectors {
+      @include mq(laptop) {
+        width: 340px;
+        height: 340px;
+      }
+
+      .wheel {
         position: absolute;
         width: 100%;
         height: 100%;
         z-index: 1;
 
-        .sector {
+        .itemWheel {
           position: absolute;
           top: 50%;
           left: 50%;
-          width: 250px;
-          height: 250px;
-          margin-left: -125px;
-          margin-top: -125px;
-          transform-origin: 50% 50%;
-          clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-          border-radius: 0 0 50% 50%;
-        }
-      }
-
-      .block-prices {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 2;
-
-        .price-item {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform-origin: 0 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
           width: 80px;
+          height: 80px;
           margin-left: -40px;
           margin-top: -40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-          // Располагаем призы по кругу на расстоянии 250px от центра
-          &:nth-child(1) {
-            transform: rotate(0deg) translateY(var(--rotation-radius)) rotate(0deg);
-          }
-
-          &:nth-child(2) {
-            transform: rotate(40deg) translateY(var(--rotation-radius)) rotate(-40deg);
-          }
-
-          &:nth-child(3) {
-            transform: rotate(80deg) translateY(var(--rotation-radius)) rotate(-80deg);
-          }
-
-          &:nth-child(4) {
-            transform: rotate(120deg) translateY(var(--rotation-radius)) rotate(-120deg);
-          }
-
-          &:nth-child(5) {
-            transform: rotate(160deg) translateY(var(--rotation-radius)) rotate(-160deg);
-          }
-
-          &:nth-child(6) {
-            transform: rotate(200deg) translateY(var(--rotation-radius)) rotate(-200deg);
-          }
-
-          &:nth-child(7) {
-            transform: rotate(240deg) translateY(var(--rotation-radius)) rotate(-240deg);
-          }
-
-          &:nth-child(8) {
-            transform: rotate(280deg) translateY(var(--rotation-radius)) rotate(-280deg);
-          }
-
-          &:nth-child(9) {
-            transform: rotate(320deg) translateY(var(--rotation-radius)) rotate(-320deg);
-          }
-
-          .price-img {
+          .itemWheel-img {
             width: 80px;
             height: 80px;
             object-fit: contain;
+
+            @include mq(laptop) {
+              width: 60px;
+              height: 60px;
+            }
           }
         }
       }
@@ -263,6 +346,16 @@ const spinRoulette = () => {
       transform: translateX(-25px);
       z-index: 2;
 
+      @include mq(laptop) {
+        flex-direction: column;
+        height: auto;
+        transform: none;
+
+        .ButtonItem {
+          width: 100%;
+        }
+      }
+
       .result {
         width: 100%;
         height: 100%;
@@ -272,6 +365,20 @@ const spinRoulette = () => {
         flex-direction: column;
         align-items: center;
 
+        @include mq(laptop) {
+          gap: 12px;
+        }
+
+        .result-time {
+          display: none;
+
+          @include mq(laptop) {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          }
+        }
+
         .result-price {
           display: flex;
           align-items: center;
@@ -280,6 +387,17 @@ const spinRoulette = () => {
           height: 150px;
           border: 1px solid var(--color-border);
           border-radius: 18px;
+
+          @include mq(laptop) {
+            width: 120px;
+            height: 120px;
+          }
+        }
+
+        .result-help {
+          @include mq(laptop) {
+            display: none;
+          }
         }
       }
 
@@ -288,24 +406,44 @@ const spinRoulette = () => {
         flex-direction: column;
         align-items: center;
 
-        .actions-balance {
-          font-weight: 400;
-          font-size: 14px;
-          letter-spacing: 2px;
-          padding: 4px 12px;
-          margin: 20px 0 30px;
-          background: #1E2F444D;
-          border: 1px solid #B3DFF438;
-          backdrop-filter: blur(10px);
-          box-shadow: 0px 0px 10px 0px #67C9F729, 0px 0px 30px 0px #67C9F721 inset;
-          border-radius: 20px;
-
+        .actions-time {
+          @include mq(laptop) {
+            display: none;
+          }
         }
+
+        .balance-display {
+          @include mq(laptop) {
+            display: none;
+          }
+        }
+
         .actions-btn {
           text-align: center;
           display: grid;
           gap: 50px;
           margin-top: auto;
+
+          @include mq(laptop) {
+            gap: 20px;
+          }
+        }
+      }
+
+      .back {
+        position: absolute;
+        right: -28px;
+        top: -28px;
+        cursor: pointer;
+
+        @include mq(laptop) {
+          display: none;
+        }
+      }
+
+      .divider {
+        @include mq(laptop) {
+          display: none;
         }
       }
     }
@@ -313,14 +451,32 @@ const spinRoulette = () => {
     .roulette-img {
       position: absolute;
       top: 0;
+
+      @include mq(laptop) {
+        display: none;
+      }
+    }
+
+    .roulette-img-mobile {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, 0);
+      display: none;
+
+      @include mq(laptop) {
+        display: block;
+      }
     }
 
     .arrow {
       margin-bottom: 46px;
       z-index: 3;
+      position: relative;
 
-      &.spinning {
-        transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      @include mq(laptop) {
+        width: 120px;
+        margin-bottom: 30px;
       }
     }
   }

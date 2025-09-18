@@ -9,7 +9,7 @@ import ShopView from '@/pages/Account/ShopView.vue'
 import RatingView from '@/pages/Account/RatingView.vue'
 import SeasonalRatingView from '@/pages/Account/SeasonRatingView.vue'
 import RouletteView from '@/pages/Account/RouletteView.vue'
-import { useAuth } from '../composables/useAuth'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,26 +79,19 @@ const router = createRouter({
 
 // Навигационный guard для проверки авторизации
 router.beforeEach((to, from, next) => {
-  const { isLoggedIn, initAuth } = useAuth()
-
-  // Инициализируем состояние авторизации
-  initAuth()
+  const AuthStore = useAuthStore()
+  AuthStore.initAuth()
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
   const requiresGuest = to.matched.some((record) => record.meta.requiresGuest)
   const isPublic = to.matched.some((record) => record.meta.public)
 
-  // Получаем значение из ref
-  const isUserLoggedIn = isLoggedIn.value
-
+  const isUserLoggedIn = AuthStore.isAuthenticated
   if (requiresAuth && !isUserLoggedIn) {
-    // Если требуется авторизация, но пользователь не авторизован
     next('/')
   } else if (requiresGuest && isUserLoggedIn) {
-    // Если требуется быть гостем, но пользователь авторизован
     next('/account')
   } else {
-    // Разрешаем переход
     next()
   }
 })

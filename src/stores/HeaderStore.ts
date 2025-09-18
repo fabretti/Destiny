@@ -6,9 +6,9 @@ export const useHeaderStore = defineStore('header', {
   state: () => ({
   }),
   actions: {
-    async getOnline() {
+    async getOnline(): Promise<IOnlineResponse> {
       try {
-        const response = await axios.get<IOnlineResponse>(`/api/online`);
+        const response = await axios.get(`/api/online`);
         return response.data;
       } catch (error: any) {
         throw error;

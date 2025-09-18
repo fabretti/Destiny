@@ -28,7 +28,7 @@ export interface IRefreshRequest {
 }
 
 export interface IRefreshResponse {
-  status: RefreshStatus;
+  response: RefreshStatus;
   access_token?: string;
   refresh_token?: string;
 }

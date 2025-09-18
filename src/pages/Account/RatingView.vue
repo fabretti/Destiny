@@ -1,19 +1,18 @@
 <template>
-  <div class="rating">
-    <div class="back" @click="handleBack">
-      <IconBase name="arrow-back" />
-    </div>
-    <div class="rating-title">
-      <h1 class="text-uppercase">Рейтинг башни испытаний</h1>
-      <div class="text-body-18 mt-4">Обнуление и выдача наград через:
-        <span class="text-underline">23 дня 14 часов</span>
+  <WrapperBlock class="rating">
+    <template #header>
+      <div class="rating-title">
+        <h1 class="text-uppercase">Рейтинг башни испытаний</h1>
+        <div class="text-body-18 mt-4 text-center">Обнуление и выдача наград через:
+          <span class="text-underline">23 дня 14 часов</span>
+        </div>
       </div>
-    </div>
+    </template>
     <div class="rating-table">
       <el-tabs v-model="activeTab" type="card" @tab-click="changeTab">
         <el-tab-pane v-for="tab in tabsData" :key="tab.id" :label="tab.name" :name="tab.id">
           <div class="CustomTable">
-            <el-table :data="currentTabData" max-height="600">
+            <el-table :data="currentTabData">
               <el-table-column type="index" label="#" width="50">
               </el-table-column>
               <el-table-column prop="name" label="Никнейм">
@@ -21,12 +20,12 @@
                   <div>{{ row.name }}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="floor" label="Этаж">
+              <el-table-column prop="floor" label="Этаж" width="80">
                 <template #default="{ row }">
                   <div>{{ row.floor }}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="totalFloors" label="Всего этажей">
+              <el-table-column prop="totalFloors" label="Всего этажей" width="110">
                 <template #default="{ row }">
                   <div>{{ row.totalFloors }}</div>
                 </template>
@@ -49,14 +48,11 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-  </div>
+  </WrapperBlock>
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import IconBase from '@/shared/IconBase.vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
+import WrapperBlock from '@/components/Blocks/WrapperBlock.vue'
 
 interface RatingItem {
   id: number
@@ -122,58 +118,12 @@ const currentTabData = computed(() => {
   return currentTab?.data || []
 })
 
-const handleBack = () => {
-  router.push('/')
-}
-
 const changeTab = (tab: any) => {
   console.log('Переключен таб:', tab.props.name)
 }
 </script>
 <style lang="scss">
 .rating {
-  width: 100%;
-  height: max-content;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  padding: 32px 46px 46px;
-  border-radius: 24px;
-  background: var(--color-primary);
-  margin: 40px 0;
-
-  @include mq(laptop) {
-    padding: 0;
-    border-radius: 0;
-    background: none;
-    margin-top: 60px;
-  }
-
-  .back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    left: 46px;
-    top: 20px;
-    cursor: pointer;
-    transition: 0.3s ease;
-
-    &:hover {
-      translate: -5px;
-    }
-
-    @include mq(laptop) {
-      top: -45px;
-      left: 15px;
-    }
-
-  }
-
   .rating-table {
     width: 100%;
 

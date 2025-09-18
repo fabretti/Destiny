@@ -61,6 +61,7 @@ import { ref, computed } from 'vue'
 import AuthInput from '@/components/AuthInput.vue'
 import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
+import { useLkStore } from '@/stores/LkStore'
 
 interface Props {
   modelValue: boolean
@@ -73,6 +74,8 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const LkStore = useLkStore()
 
 const tabs = [
   {
@@ -87,7 +90,7 @@ const tabs = [
     value: 'resetEmail',
     label: 'Смена email',
     title: 'Смена email',
-    subtitle: 'Ваш текущий email: <span class="text-underline">mien.lu@yandex.ru</span>',
+    subtitle: 'Ваш текущий email: <span class="text-underline">' + LkStore.accountInfo.email + '</span>',
     buttonText: 'СОХРАНИТЬ ИЗМЕНЕНИЯ',
   },
 ]

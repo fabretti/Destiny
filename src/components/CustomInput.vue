@@ -116,6 +116,12 @@ const handleInput = (event: Event) => {
       padding: 0 20px;
       height: 50px;
       border-radius: 6px;
+      @include mq(laptop) {
+        font-size: 12px;
+        padding: 0 12px;
+        height: 40px;
+        border-radius: 6px;
+      }
     }
   }
 
@@ -137,6 +143,9 @@ const handleInput = (event: Event) => {
     height: 24px;
     color: rgba(81, 98, 119, 1);
     pointer-events: none;
+    @include mq(laptop) {
+      display: none;
+    }
   }
 }
 </style>

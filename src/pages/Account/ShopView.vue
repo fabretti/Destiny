@@ -1,13 +1,15 @@
 <template>
   <WrapperBlock title="Магазин" class="shop">
-    <div class="shop-content">
-      <div class="shop-content__search">
+    <template #header>
+      <div class="shop-search">
         <CustomInput v-model="search" placeholder="Поиск по ID или названию предмета" search />
       </div>
+    </template>
+    <div class="shop-content">
       <el-tabs v-model="activeName" class="tabs" @tab-click="handleClick">
         <el-tab-pane v-for="item in items" :key="item.name" :label="item.label" :name="item.name">
           <div class="shop-content__items">
-            <ShopItem v-for="item in 5" :key="item" />
+            <ShopItem v-for="item in 12" :key="item" />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -48,28 +50,40 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 <style lang="scss">
 .shop {
+  .shop-search {
+    width: 100%;
+  }
   .shop-content {
     display: grid;
     gap: 30px;
+
+    @include mq(laptop) {
+      gap: 20px;
+    }
+
     .el-tabs {
       overflow: hidden;
+
       .el-tabs__item {
         color: var(--color-white);
         padding: 0 6px;
       }
+
       .el-tabs__nav-wrap {
         &:after {
           background-color: #ffffff33;
         }
+
         .el-tabs__active-bar {
           background-color: var(--color-white);
         }
       }
     }
+
     .shop-content__items {
       display: grid;
       gap: 10px;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     }
   }
 }

@@ -42,6 +42,7 @@ const downloadBlocks = [
 .download-view {
   width: 100%;
   padding: 70px 0;
+  overflow: hidden;
   .download-view__content {
     padding-top: 70px;
     display: grid;

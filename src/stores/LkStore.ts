@@ -4,10 +4,15 @@ import type { IAccountInfo } from './types/LkStoreTypes';
 
 export const useLkStore = defineStore('lk', {
   state: () => ({
-    accountInfo: null as IAccountInfo | null,
+    accountInfo: {
+      balance: 0,
+      bonus_balance: 0,
+      email: '',
+      login: '',
+    },
   }),
   actions: {
-    async getAccountInfo() {
+    async getAccountInfo(): Promise<IAccountInfo> {
       try {
         const response = await apiClient.get('/api/account/info');
         return response.data;

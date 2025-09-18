@@ -5,12 +5,17 @@
     </div>
     <div class="seasonRating-title">
       <h1 class="text-uppercase">Сезонный рейтинг</h1>
-      <div class="text-body-18 mt-4">Обнуление и выдача наград через:
+      <div class="text-body-18 mt-4 text-center">Обнуление и выдача наград через:
         <span class="text-underline">23 дня 14 часов</span>
       </div>
     </div>
+    <el-radio-group v-model="tabPosition" class="seasonRating-radio">
+      <el-radio-button value="leaders">Лидеры</el-radio-button>
+      <el-radio-button value="fasters">Самые быстрые</el-radio-button>
+      <el-radio-button value="pvp">PVP</el-radio-button>
+    </el-radio-group>
     <div class="seasonRating-tables">
-      <div class="seasonRating-tables__item">
+      <div class="seasonRating-tables__item" v-show="showLeadersBlock">
         <div class="title text-body-20 text-uppercase">Лидеры</div>
         <el-tabs v-model="activeTabLeaders" type="card" @tab-click="changeLeadersTab">
           <el-tab-pane v-for="tab in tabsLeadersData" :key="tab.id" :label="tab.name" :name="tab.id">
@@ -40,7 +45,7 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="seasonRating-tables__item">
+      <div class="seasonRating-tables__item" v-show="showFastersBlock">
         <div class="title text-body-20 text-uppercase">Самые быстрые</div>
         <el-tabs v-model="activeTabFasters" type="card" @tab-click="changeFastersTab">
           <el-tab-pane v-for="tab in tabsFastersData" :key="tab.id" :label="tab.name" :name="tab.id">
@@ -70,7 +75,7 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="seasonRating-tables__item">
+      <div class="seasonRating-tables__item" v-show="showPvpBlock">
         <div class="title text-body-20 text-uppercase">Рейтинг Pvp</div>
         <div class="subtitle text-body-18">Учет поединков на аренах</div>
         <div class="CustomTable">
@@ -118,8 +123,10 @@ import IconBase from '@/shared/IconBase.vue'
 import { useRouter } from 'vue-router'
 import Divider from '@/components/Divider.vue'
 import ShopItem from '@/components/Blocks/ShopItem.vue'
+import { useScreenSize } from '@/composables/useScreenSize'
 
 const router = useRouter()
+const { isDesktop } = useScreenSize()
 
 interface seasonLeadersItem {
   id: number
@@ -145,6 +152,7 @@ interface TabLeadersData extends BaseTabData<seasonLeadersItem> { }
 
 interface TabFastersData extends BaseTabData<seasonFastersItem> { }
 
+const tabPosition = ref('leaders')
 const tableHeight = ref(260)
 const tabsLeadersData = ref<TabLeadersData[]>([
   {
@@ -237,6 +245,10 @@ const currentTabFastersData = computed(() => {
 const changeFastersTab = (tab: any) => {
   console.log('Переключен таб:', tab.props.name)
 }
+
+const showLeadersBlock = computed(() => isDesktop.value || tabPosition.value === 'leaders')
+const showFastersBlock = computed(() => isDesktop.value || tabPosition.value === 'fasters')
+const showPvpBlock = computed(() => isDesktop.value || tabPosition.value === 'pvp')
 </script>
 <style lang="scss">
 .seasonRating {
@@ -253,10 +265,11 @@ const changeFastersTab = (tab: any) => {
   margin: 40px 0;
 
   @include mq(laptop) {
-    padding: 0;
+    padding: 60px 16px 32px;
     border-radius: 0;
+    margin: 0;
     background: none;
-    margin-top: 60px;
+    gap: 24px;
   }
 
   .back {
@@ -276,8 +289,15 @@ const changeFastersTab = (tab: any) => {
     }
 
     @include mq(laptop) {
-      top: -45px;
-      left: 15px;
+      display: none;
+    }
+  }
+
+  .seasonRating-radio {
+    display: none;
+
+    @include mq(laptop) {
+      display: block;
     }
   }
 
@@ -293,9 +313,9 @@ const changeFastersTab = (tab: any) => {
     justify-content: space-between;
     align-items: flex-start;
     gap: 24px;
-    @include mq(laptop) {
-    
-    }
+
+    @include mq(laptop) {}
+
     .el-table .el-table__cell {
       padding: 2px 0;
     }

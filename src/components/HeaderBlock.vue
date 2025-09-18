@@ -14,35 +14,21 @@
       <Divider />
       <ul class="header-nav">
         <li v-for="item in navItems" :key="item.id" class="nav-item">
-          <router-link class="text-body-20" :to="item.href">
+          <router-link class="text-body-20" :to="item.href" @click="isOpenedMenu = false">
             <IconBase :name="item.icon" />
             <span>{{ item.name }}</span>
           </router-link>
         </li>
       </ul>
       <Divider />
-      <div class="header-info">
-        <div class="header-info__online">
-          <span class="text-body-16">В сети:</span>
-          <span class="online-count text-body-16">{{ online?.total }}</span>
-        </div>
-        <div class="header-info__race text-body-16">
-          <div class="online">
-            <IconBase name="elies" />
-            {{ online?.light }}
-          </div>
-          <div class="online">
-            <IconBase name="asm" />
-            {{ online?.dark }}
-          </div>
-        </div>
-      </div>
+      <OnlineInfoBlock />
       <Divider />
       <div class="header-btns">
         <LanguageSelector />
         <ButtonItem variant="solid" @click="$router.push('/download')" class="header-btns__install">Установить
         </ButtonItem>
-        <ButtonItem v-if="!isLoggedIn" :variant="isDesktop ? 'empty' : 'white'" @click="openAuthModal">
+        <ButtonItem v-if="!AuthStore.isAuthenticated" :variant="isDesktop ? 'empty' : 'white'"
+          @click="AuthStore.openAuthModal">
           Личный кабинет
         </ButtonItem>
         <router-link v-else to="/account" class="header-btns__account">
@@ -61,15 +47,16 @@ import IconBase from '@/shared/IconBase.vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import Divider from './Divider.vue'
 import LanguageSelector from './LanguageSelector.vue'
-import { useAuth } from '@/composables/useAuth'
+import OnlineInfoBlock from './OnlineInfoBlock.vue'
+import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
 import { useHeaderStore } from '@/stores/HeaderStore'
 import { useScreenSize } from '@/composables/useScreenSize'
 import type { IOnlineResponse, ISeasonTimeData } from '@/stores/types/HeaderStoreTypes'
 import { getDayDeclension } from '@/utils/declension'
 
-const { isLoggedIn, openAuthModal } = useAuth()
 const router = useRouter()
+const AuthStore = useAuthStore()
 const headerStore = useHeaderStore()
 const { isDesktop } = useScreenSize()
 
@@ -81,23 +68,15 @@ const navItems = [
 ]
 
 const goToSeason = () => {
-  if (isLoggedIn.value) {
+  if (AuthStore.isAuthenticated) {
     router.push('/account/seasonal-rating')
   } else {
-    openAuthModal()
+    AuthStore.openAuthModal()
   }
 }
 
 const online = ref<IOnlineResponse | null>(null)
 const seasonTime = ref<ISeasonTimeData | null>(null)
-
-const getOnline = async () => {
-  try {
-    online.value = await headerStore.getOnline()
-  } catch (error) {
-    console.error(error)
-  }
-}
 
 const getSeasonTime = async () => {
   try {
@@ -108,14 +87,13 @@ const getSeasonTime = async () => {
 }
 
 onMounted(async () => {
-  await getOnline()
   await getSeasonTime()
 })
 </script>
 
 <style lang="scss">
 .header {
-  z-index: 3;
+  z-index: 4;
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
 
   .divider {
@@ -129,10 +107,13 @@ onMounted(async () => {
 
   &.opened {
     @include mq(laptop) {
+      height: 100%;
       background: var(--color-primary);
 
       .header-container {
         opacity: 1;
+        display: flex;
+        height: auto;
       }
 
       .header-humburger {
@@ -156,7 +137,7 @@ onMounted(async () => {
 
   @include mq(laptop) {
     width: 100%;
-    height: 100%;
+    height: 0px;
     position: absolute;
     z-index: 4;
 
@@ -177,8 +158,8 @@ onMounted(async () => {
     justify-content: space-between;
 
     @include mq(laptop) {
+      display: none;
       padding: 80px 20px;
-      height: auto;
       flex-direction: column;
       opacity: 0;
     }
@@ -291,78 +272,6 @@ onMounted(async () => {
     }
   }
 
-  .header-info {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 16px;
-
-    @include mq(laptop) {
-      padding: 24px 0;
-      gap: 16px;
-    }
-
-    .header-info__online {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      @include mq(laptop) {
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .online-count {
-        min-width: 70px;
-        height: 24px;
-        border-radius: 20px;
-
-        border: 1px solid #b3dff438;
-        backdrop-filter: blur(10px);
-        box-shadow: 0px 0px 30px 0px #67c9f721 inset;
-
-        font-family: Georgia Pro;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 24px;
-        letter-spacing: 2px;
-        text-align: center;
-      }
-    }
-
-    .header-info__race {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-
-      @include mq(laptop) {
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .online {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-    }
-
-    &:after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1px;
-      height: 50px;
-      background: rgba(255, 255, 255, 0.2);
-
-      @include mq(laptop) {
-        display: none;
-      }
-    }
-  }
 
   .header-lang {
     position: relative;

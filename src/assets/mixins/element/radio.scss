@@ -1,0 +1,27 @@
+.el-radio-group {
+  border-radius: 18px;
+  background: #1E2F4480;
+  border: 1px solid #31445B;
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+
+  .el-radio-button {
+    .el-radio-button__inner {
+      padding: 7px 16px;
+      color: var(--color-white);
+      background-color: inherit;
+      border-radius: 20px;
+      border: 1px solid transparent;
+    }
+
+    &.is-active {
+      .el-radio-button__inner {
+        border-color: #B3DFF438!important;
+        background: #1E2F444D!important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 0px 10px 0px #67C9F729, 0px 0px 30px 0px #67C9F721 inset !important;
+        border-radius: 20px;
+      }
+    }
+  }
+}

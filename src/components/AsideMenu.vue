@@ -1,47 +1,29 @@
 <template>
   <aside class="aside-menu">
+    <OnlineInfoBlock />
     <nav class="menu-nav">
       <ul class="menu-list">
-        <li
-          v-for="item in menuItems"
-          :key="item.id"
-          class="menu-item"
-          :class="{
-            'menu-item--logout': item.isLogout,
-          }"
-        >
+        <li v-for="item in menuItems" :key="item.id" class="menu-item" :class="{
+          'menu-item--logout': item.isLogout,
+        }">
           <!-- Для пунктов с маршрутами используем router-link -->
-          <router-link
-            v-if="item.route && !item.action"
-            :to="item.route"
-            class="menu-item__link"
-            :class="{
-              'menu-item__link--active': $route.path === item.route,
-            }"
-          >
+          <router-link v-if="item.route && !item.action" :to="item.route" class="menu-item__link" :class="{
+            'menu-item__link--active': $route.path === item.route,
+          }" @click="closeAsideMenu()">
             <div class="menu-item__content">
               <div class="menu-item__icon">
                 <IconBase v-if="$route.path === item.route" name="blueBlur" class="blur" />
                 <IconBase :name="item.icon" class="icon" />
               </div>
               <span class="menu-item__text">{{ item.text }}</span>
-              <IconBase
-                v-if="$route.path === item.route"
-                class="menu-item__indicator"
-                name="indicator"
-              />
+              <IconBase v-if="$route.path === item.route" class="menu-item__indicator" name="indicator" />
             </div>
           </router-link>
 
           <!-- Для пунктов с кастомными действиями используем обычный div -->
-          <div
-            v-else
-            class="menu-item__link"
-            :class="{
-              'menu-item__link--logout': item.isLogout,
-            }"
-            @click="handleItemClick(item)"
-          >
+          <div v-else class="menu-item__link" :class="{
+            'menu-item__link--logout': item.isLogout,
+          }" @click="handleItemClick(item)">
             <div class="menu-item__content">
               <div class="menu-item__icon">
                 <IconBase name="redBlur" class="blur" />
@@ -57,10 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import OnlineInfoBlock from './OnlineInfoBlock.vue'
 import IconBase from '@/shared/IconBase.vue'
-import { useAuth } from '@/composables/useAuth'
+import { useAuthStore } from '@/stores/AuthStore'
 
 interface MenuItem {
   id: string
@@ -77,9 +60,8 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const { logout } = useAuth()
-
-// Динамические пункты меню (по умолчанию)
+const AuthStore = useAuthStore()
+const emit = defineEmits(['closeAsideMenu'])
 const defaultMenuItems: MenuItem[] = [
   {
     id: 'account',
@@ -138,10 +120,8 @@ const defaultMenuItems: MenuItem[] = [
   },
 ]
 
-// Используем переданные пункты или пункты по умолчанию
 const menuItems = ref<MenuItem[]>(props.items || defaultMenuItems)
 
-// Следим за изменениями переданных пунктов
 watch(
   () => props.items,
   (newItems) => {
@@ -152,20 +132,20 @@ watch(
   { deep: true },
 )
 
-// Обработчик клика по пункту меню (только для кастомных действий)
+const closeAsideMenu = () => {
+  emit('closeAsideMenu')
+}
+
 const handleItemClick = (item: MenuItem) => {
   if (item.action) {
+
     item.action()
   }
 }
 
-// Обработчик выхода
 const handleLogout = () => {
-  // Здесь можно добавить логику выхода
-  logout()
+  AuthStore.logout()
   router.push('/')
-  console.log('Выход из системы')
-  // Например, очистка токенов, редирект на страницу входа
 }
 </script>
 
@@ -177,6 +157,29 @@ const handleLogout = () => {
   padding: 30px 40px;
   overflow: hidden;
   z-index: 2;
+  &.full-pages {
+    display: none;
+  }
+  .online-info {
+    display: none;
+  }
+
+  @include mq(laptop) {
+    display: none;
+    min-width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    padding: 16px;
+    z-index: 5;
+
+    .online-info {
+      display: flex;
+      padding: 15px;
+    }
+  }
 
   .menu-nav {
     height: 100%;
@@ -190,24 +193,31 @@ const handleLogout = () => {
     display: flex;
     flex-direction: column;
     gap: 4px;
+
+    @include mq(laptop) {
+      padding: 15px;
+    }
   }
 
   .menu-item {
     position: relative;
     transition: all 0.3s ease;
+
     &:not(:last-child) {
       border-bottom: 1px solid #a8b5c51a;
+
       .menu-item__link {
         padding-bottom: 20px;
       }
     }
+
     &:not(:first-child) {
       .menu-item__link {
         padding-top: 20px;
       }
     }
 
-   &.menu-item--logout {
+    &.menu-item--logout {
       margin-top: auto;
     }
   }
@@ -219,14 +229,17 @@ const handleLogout = () => {
     cursor: pointer;
     border-radius: 12px;
     transition: all 0.3s ease;
+
     &:hover {
       .menu-item__text {
         transform: translateX(8px);
       }
     }
+
     .menu-item__link--active {
       background: rgba(255, 255, 255, 0.1);
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
       .menu-item__icon {
         background: #67c9f7bf;
       }
@@ -252,6 +265,7 @@ const handleLogout = () => {
       height: 24px;
       margin-right: 14px;
       transition: color 0.3s ease;
+
       .blur {
         position: absolute;
         left: 50%;
@@ -259,6 +273,7 @@ const handleLogout = () => {
         transform: translate(-50%, -50%);
         z-index: 1;
       }
+
       .icon {
         z-index: 2;
       }
@@ -271,36 +286,13 @@ const handleLogout = () => {
       letter-spacing: 1px;
       transition: 0.3s ease;
     }
+
     .menu-item__indicator {
       position: absolute;
       right: 0;
       top: 50%;
       transform: translateY(-50%);
     }
-  }
-}
-// Адаптивность
-@media (max-width: 768px) {
-  .aside-menu {
-    width: 100%;
-    height: auto;
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .menu-list {
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 0 16px;
-  }
-
-  .menu-item {
-    min-width: 120px;
-    margin: 0 4px;
-  }
-
-  .menu-item__text {
-    font-size: 14px;
   }
 }
 </style>

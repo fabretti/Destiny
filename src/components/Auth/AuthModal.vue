@@ -1,5 +1,5 @@
 <template>
-  <BaseAuthModal v-model="showAuthModal" :tabs="tabs" :form="form" :errors="errors" :loading="isLoading"
+  <BaseAuthModal v-model="AuthStore.showAuthModal" :tabs="tabs" :form="form" :errors="errors" :loading="AuthStore.isLoading"
     @submit="handleSubmit" @tab-change="handleTabChange" @close="handleClose">
     <template #default="{ activeTab, form, errors }">
       <AuthInput v-model="form.login" type="text" placeholder="Логин" :error="errors.login" />
@@ -14,7 +14,7 @@
               : (showRegisterPassword = !showRegisterPassword)
             " />
         <div v-if="activeTab === 'login'" class="password-block-forgot">
-          <p class="text-link color-white" @click="openForgotPasswordModal">Забыли пароль?</p>
+          <p class="text-link color-white">Забыли пароль?</p>
         </div>
       </div>
       <AuthInput v-if="activeTab === 'register'" v-model="form.repeatPassword" type="password"
@@ -26,10 +26,12 @@
 
 <script setup lang="ts">
 import { ElNotification } from 'element-plus';
-import { useAuth } from '@/composables/useAuth'
+import { useAuthStore } from '@/stores/AuthStore'
 import AuthInput from '@/components/AuthInput.vue'
 import BaseAuthModal from '@/components/Auth/BaseAuthModal.vue'
 import { ref } from 'vue'
+
+const AuthStore = useAuthStore()
 
 const tabs = [
   {
@@ -70,8 +72,6 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>()
-
-const { login, register, showAuthModal, closeAuthModal, openForgotPasswordModal, isLoading, error } = useAuth()
 
 const validateLogin = (value: string): string => {
   if (!value.trim()) return 'Логин обязателен'
@@ -155,7 +155,7 @@ const handleSubmit = async (activeTab: string, formData: Record<string, any>) =>
 
 const handleLogin = async (formData: Record<string, any>) => {
   try {
-    const success = await login({
+    const success = await AuthStore.login({
       login: formData.login,
       password: formData.password,
     })
@@ -164,17 +164,17 @@ const handleLogin = async (formData: Record<string, any>) => {
       emit('success')
     } else {
       // Показываем ошибку из store или общую ошибку
-      errors.value.login = error.value || 'Неверный логин или пароль'
+      errors.value.login = AuthStore.error || 'Неверный логин или пароль'
     }
   } catch (err) {
     console.error('Ошибка авторизации:', err)
-    errors.value.login = error.value || 'Ошибка авторизации'
+    errors.value.login = AuthStore.error || 'Ошибка авторизации'
   }
 }
 
 const handleRegister = async (formData: Record<string, any>) => {
   try {
-    const success = await register({
+    const success = await AuthStore.register({
       login: formData.login,
       password: formData.password,
       email: formData.email,
@@ -184,7 +184,7 @@ const handleRegister = async (formData: Record<string, any>) => {
       emit('success')
     } else {
       // Показываем конкретную ошибку из store
-      const errorMessage = error.value || 'Ошибка регистрации'
+      const errorMessage = AuthStore.error || 'Ошибка регистрации'
       ElNotification({
         title: 'Ошибка',
         message: errorMessage,
@@ -204,7 +204,7 @@ const handleRegister = async (formData: Record<string, any>) => {
     }
   } catch (err) {
     console.error('Ошибка регистрации:', err)
-    errors.value.login = error.value || 'Ошибка регистрации'
+    errors.value.login = AuthStore.error || 'Ошибка регистрации'
   }
 }
 
@@ -214,7 +214,7 @@ const handleTabChange = (tab: string) => {
 }
 
 const handleClose = () => {
-  closeAuthModal()
+  AuthStore.closeAuthModal()
   clearForm()
 }
 </script>

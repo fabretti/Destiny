@@ -70,8 +70,13 @@ defineProps({
     &--solid {
       color: var(--color-white);
       background: var(--color-primary-light);
+      
+      border: 1px solid #b3dff438;
+      backdrop-filter: blur(10px);
+      box-shadow: 0px 0px 30px 0px #67c9f721;
       &:hover {
         background: var(--color-primary);
+        box-shadow: 0px 0px 10px 0px #67c9f729;
       }
     }
     &--white {
@@ -130,11 +135,12 @@ defineProps({
       height: 30px;
       width: 30px;
     }
+    &--icon-36 {
+      height: 36px;
+      width: 36px;
+    }
     &--sm {
       max-height: 25px;
-      border: 1px solid #b3dff438;
-      backdrop-filter: blur(10px);
-      box-shadow: 0px 0px 30px 0px #67c9f721;
 
       padding: 0 16px;
       font-weight: 400;
@@ -143,10 +149,6 @@ defineProps({
       letter-spacing: 2px;
       text-align: center;
       transition: 0.2s ease;
-      &:hover {
-        box-shadow: 0px 0px 10px 0px #67c9f729;
-        background: #b3dff438;
-      }
     }
     &--medium {
       font-size: 18px;

@@ -27,7 +27,6 @@ const { isDesktop } = useScreenSize();
 const currentYear = new Date().getFullYear()
 
 const socials = [
-  { id: 1, name: 'VK', href: 'https://vk.com/aiondestiny' },
   { id: 2, name: 'discord', href: 'https://discord.com/aiondestiny' },
   { id: 3, name: 'tg', href: 'https://t.me/aiondestiny' },
 ]

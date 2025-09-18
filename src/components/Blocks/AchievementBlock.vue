@@ -4,7 +4,7 @@
       {{ status }}
     </div>
     <div class="achievement-block__header">
-      <div class="text-body-20 text-uppercase">{{ item.name }}</div>
+      <div class="text-body-20 text-uppercase text-center">{{ item.name }}</div>
       <span class="text-body-16 text-center">{{ item.info }}</span>
     </div>
     <div class="achievement-block__count">{{ item.count }}</div>

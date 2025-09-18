@@ -14,7 +14,6 @@ import type {
 
 export const useAuthStore = defineStore('auth', {
   state: (): IAuthState => ({
-    // Состояние авторизации
     isAuthenticated: false,
     user: null,
     isLoading: false,
@@ -22,20 +21,13 @@ export const useAuthStore = defineStore('auth', {
     accessToken: null,
     refreshToken: null,
 
-    // Состояние модальных окон
     showAuthModal: false,
     showForgotPasswordModal: false,
   }),
 
-  getters: {
-    isLoggedIn: (state) => state.isAuthenticated,
-    currentUser: (state) => state.user,
-    isAuthModalVisible: (state) => state.showAuthModal,
-    isForgotPasswordModalVisible: (state) => state.showForgotPasswordModal,
-  },
+  getters: {},
 
   actions: {
-    // API методы
     async apiLogin(credentials: ILoginRequest): Promise<ILoginResponse> {
       try {
         const response = await apiClient.post<ILoginResponse>('/api/auth/login', credentials)
@@ -65,7 +57,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Действия авторизации
     async login(credentials: ILoginRequest) {
       try {
         this.isLoading = true
@@ -78,11 +69,12 @@ export const useAuthStore = defineStore('auth', {
           this.accessToken = data.access_token
           this.refreshToken = data.refresh_token
 
-          // Устанавливаем пользователя (можно расширить, если API возвращает данные пользователя)
           this.user = {
             id: '1',
             name: credentials.login,
           }
+
+          this.saveAuthToStorage()
 
           return true
         } else if (data.response === AuthStatus.BAD_LOGIN_OR_PASSWORD) {
@@ -111,15 +103,15 @@ export const useAuthStore = defineStore('auth', {
           this.accessToken = data.access_token
           this.refreshToken = data.refresh_token
 
-          // Устанавливаем пользователя
           this.user = {
             id: '1',
             name: credentials.login,
           }
 
+          this.saveAuthToStorage()
+
           return true
         } else {
-          // Обрабатываем различные типы ошибок регистрации
           switch (data.response) {
             case RegisterStatus.BAD_LOGIN:
               this.error = 'Логин не соответствует требованиям'
@@ -157,15 +149,17 @@ export const useAuthStore = defineStore('auth', {
       }
 
       try {
-        const response = await this.apiRefreshToken(this.refreshToken)
+        const data = await this.apiRefreshToken(this.refreshToken)
 
-        if (response.status === RefreshStatus.SUCCESS && response.access_token && response.refresh_token) {
-          this.accessToken = response.access_token
-          this.refreshToken = response.refresh_token
+        console.log('logout?', data)
+        if (data.response === RefreshStatus.SUCCESS && data.access_token && data.refresh_token) {
+          this.accessToken = data.access_token
+          this.refreshToken = data.refresh_token
 
+          this.saveAuthToStorage()
 
           return true
-        } else if (response.status === RefreshStatus.BAD_REFRESH_TOKEN) {
+        } else if (data.response === RefreshStatus.BAD_REFRESH_TOKEN) {
           this.logout()
           return false
         }
@@ -182,22 +176,56 @@ export const useAuthStore = defineStore('auth', {
       this.user = null
       this.accessToken = null
       this.refreshToken = null
+
+      this.clearAuthFromStorage()
     },
 
     initAuth() {
-      // Инициализация без сохранения в localStorage
-      // Состояние будет сброшено при перезагрузке страницы
+      const savedAuth = this.loadAuthFromStorage()
+
+      if (savedAuth) {
+        this.isAuthenticated = true
+        this.accessToken = savedAuth.accessToken
+        this.refreshToken = savedAuth.refreshToken
+        this.user = savedAuth.user
+      }
     },
 
-    // Действия модальных окон
+    saveAuthToStorage() {
+      const authData = {
+        accessToken: this.accessToken,
+        refreshToken: this.refreshToken,
+        user: this.user,
+        isAuthenticated: this.isAuthenticated
+      }
+      localStorage.setItem('auth', JSON.stringify(authData))
+    },
+
+    loadAuthFromStorage() {
+      try {
+        const savedAuth = localStorage.getItem('auth')
+        if (savedAuth) {
+          return JSON.parse(savedAuth)
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке данных авторизации из localStorage:', error)
+        this.clearAuthFromStorage()
+      }
+      return null
+    },
+
+    clearAuthFromStorage() {
+      localStorage.removeItem('auth')
+    },
+
     openAuthModal() {
       this.showAuthModal = true
-      this.error = null // Очищаем ошибки при открытии
+      this.error = null
     },
 
     closeAuthModal() {
       this.showAuthModal = false
-      this.error = null // Очищаем ошибки при закрытии
+      this.error = null
     },
 
     toggleAuthModal() {

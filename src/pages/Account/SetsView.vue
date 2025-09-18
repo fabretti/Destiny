@@ -1,7 +1,7 @@
 <template>
   <WrapperBlock title="Наборы" class="sets">
     <div class="sets-content">
-      <SetBlock v-for="item in 3" :key="item" />
+      <SetBlock v-for="item in 7" :key="item" />
     </div>
   </WrapperBlock>
 </template>
@@ -14,6 +14,9 @@ import SetBlock from '@/components/Blocks/SetBlock.vue'
   .sets-content {
     display: grid;
     gap: 30px;
+    @include mq(laptop) {
+      gap: 20px;
+    }
   }
 }
 </style>

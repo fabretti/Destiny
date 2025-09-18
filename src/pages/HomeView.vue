@@ -8,7 +8,7 @@
         <router-link to="/download" class="home-block__install">
           <ButtonItem variant="solid-shadow" size="big">Установить</ButtonItem>
         </router-link>
-        <ButtonItem variant="empty" color="white" size="big" @click="openAuthModal">
+        <ButtonItem variant="empty" color="white" size="big" @click="AuthStore.openAuthModal">
           Личный кабинет
         </ButtonItem>
       </div>
@@ -18,10 +18,9 @@
 </template>
 <script setup lang="ts">
 import ButtonItem from '@/shared/ButtonItem.vue'
-import IconBase from '@/shared/IconBase.vue'
-import { useAuth } from '@/composables/useAuth'
+import { useAuthStore } from '@/stores/AuthStore'
 
-const { openAuthModal } = useAuth()
+const AuthStore = useAuthStore()
 </script>
 <style lang="scss">
 .home {
