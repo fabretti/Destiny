@@ -38,6 +38,7 @@ withDefaults(defineProps<Props>(), {
     backdrop-filter: blur(10px);
     box-shadow: 0px 0px 10px 0px #67C9F729, 0px 0px 30px 0px #67C9F721 inset;
     border-radius: 20px;
+
     @include mq(laptop) {
       margin: 8px 0 0 0;
     }

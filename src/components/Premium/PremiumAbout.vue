@@ -96,6 +96,7 @@ const handleBack = () => {
   .vip-tariffs {
     margin-top: 42px;
     height: 100%;
+
     @include mq(laptop) {
       margin-top: 0;
     }
