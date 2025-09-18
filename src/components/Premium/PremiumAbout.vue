@@ -43,6 +43,7 @@ const handleBack = () => {
   @include mq(laptop) {
     background: inherit;
     padding: 0;
+    padding-top: 60px;
   }
 
   .back {
@@ -62,7 +63,8 @@ const handleBack = () => {
     }
 
     @include mq(laptop) {
-      display: none;
+      left: 0;
+      top: 0;
     }
   }
 
