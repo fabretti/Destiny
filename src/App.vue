@@ -2,7 +2,7 @@
   <HeaderBlock v-if="shouldShowHeader" />
   <main
     :class="{ 'with-aside': shouldShowAsideMenu, 'main-container': !isHomePage, 'opened-aside': isOpenedAsideMenu }">
-    <AsideMenu v-if="isAuthPage" @closeAsideMenu="isOpenedAsideMenu = false" :class="{ 'full-pages': isPagesWithoutAsideMenu }" />
+    <AsideMenu v-if="AuthStore.isAuthenticated" @closeAsideMenu="isOpenedAsideMenu = false" :class="{ 'full-pages': isPagesWithoutAsideMenu }" />
     <RouterView />
 
     <IconBase name="hamburger" class="aside-humburger" @click="isOpenedAsideMenu = !isOpenedAsideMenu" />
