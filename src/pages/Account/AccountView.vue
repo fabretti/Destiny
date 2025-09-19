@@ -36,22 +36,50 @@
           <div class="text-body-12 text-center">Всего пополнено на: <span class="text-underline">{{
             formatCurrency(LkStore.accountInfo.bonus_balance) }}</span></div>
           <div class="bonuses-item__block">
-            <div class="text-body-12">Доступно<br /> к получению</div>
+            <div class="text-body-12">{{ bonusPackStatusText }}</div>
             <div class="items">
-              <img v-for="item in 3" :key="item" src="@/assets/img/item.png" alt="item" />
+              <div 
+                v-for="item in selectedBonusPack?.items" 
+                :key="item.item_id" 
+                class="item"
+              >
+                <img 
+                  :src="`/images/items/${item.icon_name}`" 
+                  :alt="`item-${item.item_id}`" 
+                />
+                <div v-if="item.item_count > 1" class="item-count">
+                  {{ item.item_count }}
+                </div>
+              </div>
             </div>
           </div>
           <ButtonItem variant="solid" size="sm">Забрать</ButtonItem>
         </div>
-        <div class="bonuses-item">
+        <div class="bonuses-item all-list">
           <div class="text-body-16 text-center text-uppercase">Весь список бонусов </div>
           <el-scrollbar height="160px" always>
             <div class="bonuses-item__list">
-              <div v-for="item in bonusesList" :key="item.id" class="block-item">
-                <div class="text-body-12">{{ formatCurrency(item.amount) }}</div>
+              <div v-for="(pack, index) in LkStore.bonusPacks" :key="index" class="block-item">
+                <div class="text-body-12">{{ pack.pack_name }} - {{ formatCurrency(pack.price) }}</div>
                 <div class="items">
-                  <img v-for="img in item.items" :key="img" src="@/assets/img/item.png" alt="item" />
-                  <IconBase :name="item.status === 1 ? 'accept-active' : 'accept'" size="24" class="accept" />
+                  <div 
+                    v-for="item in pack.items" 
+                    :key="item.item_id" 
+                    class="item"
+                  >
+                    <img 
+                      :src="`/images/items/${item.icon_name}`" 
+                      :alt="`item-${item.item_id}`" 
+                    />
+                    <div v-if="item.item_count > 1" class="item-count">
+                      {{ item.item_count }}
+                    </div>
+                  </div>
+                  <IconBase 
+                    :name="pack.status === 'RECEIVED' ? 'accept-active' : 'accept'" 
+                    size="24" 
+                    class="accept" 
+                  />
                 </div>
               </div>
             </div>
@@ -109,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { formatCurrency } from '@/utils/formatters'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useLkStore } from '@/stores/LkStore'
@@ -177,6 +205,37 @@ const openDepositModal = () => {
 }
 
 const isLoading = ref(false)
+
+// Computed свойства для бонусных наборов
+const selectedBonusPack = computed(() => LkStore.selectedBonusPack)
+const bonusPackStatusText = computed(() => {
+  if (!selectedBonusPack.value) return 'Недоступно'
+  
+  switch (selectedBonusPack.value.status) {
+    case 'AVAILABLE':
+      return 'Доступно к получению'
+    case 'UNAVAILABLE':
+      return 'Недоступно'
+    case 'RECEIVED':
+      return 'Получено'
+    default:
+      return 'Недоступно'
+  }
+})
+
+const getBonusPackStatusText = (status: string) => {
+  switch (status) {
+    case 'AVAILABLE':
+      return 'Доступно к получению'
+    case 'UNAVAILABLE':
+      return 'Недоступно'
+    case 'RECEIVED':
+      return 'Получено'
+    default:
+      return 'Недоступно'
+  }
+}
+
 const getAccountInfo = async () => {
   isLoading.value = true
   try {
@@ -188,8 +247,19 @@ const getAccountInfo = async () => {
   }
 }
 
+const getBonusPacks = async () => {
+  try {
+    await LkStore.getBonusPacks()
+  } catch (error) {
+    console.error('Ошибка загрузки бонусных наборов:', error)
+  }
+}
+
 onMounted(async () => {
-  await getAccountInfo()
+  await Promise.all([
+    getAccountInfo(),
+    getBonusPacks()
+  ])
 })
 </script>
 
@@ -296,6 +366,32 @@ onMounted(async () => {
             .items {
               display: flex;
               gap: 8px;
+              .item {
+                position: relative;
+                display: flex;
+                img {
+                  width: 24px;
+                  height: 24px;
+                  object-fit: contain;
+                }
+                
+                .item-count {
+                  position: absolute;
+                  bottom: -2px;
+                  right: -2px;
+                  background: #FFD700;
+                  color: #000;
+                  border-radius: 50%;
+                  width: 16px;
+                  height: 16px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 10px;
+                  font-weight: bold;
+                  border: 1px solid #000;
+                }
+              }
             }
           }
 
@@ -314,6 +410,34 @@ onMounted(async () => {
                 position: relative;
                 display: flex;
                 gap: 8px;
+
+                .item {
+                  position: relative;
+                  display: flex;
+                  
+                  img {
+                    width: 24px;
+                    height: 24px;
+                    object-fit: contain;
+                  }
+                  
+                  .item-count {
+                    position: absolute;
+                    bottom: -2px;
+                    right: -2px;
+                    background: #FFD700;
+                    color: #000;
+                    border-radius: 50%;
+                    width: 16px;
+                    height: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10px;
+                    font-weight: bold;
+                    border: 1px solid #000;
+                  }
+                }
 
                 .accept {
                   position: absolute;

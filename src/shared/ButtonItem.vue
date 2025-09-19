@@ -43,6 +43,7 @@ defineProps({
   transition: 0.3s ease;
   &:disabled {
     opacity: 0.5;
+    cursor: default;
   }
 
   &.variant {
@@ -66,6 +67,9 @@ defineProps({
       &:hover {
         box-shadow: 0px 0px 40px 0px rgba(43, 109, 141, 0.72) inset;
       }
+      &:disabled:hover {
+        box-shadow: 0px 0px 15px 0px rgba(103, 201, 247, 0.18), 0px 0px 40px 0px rgba(43, 109, 141, 0.72) inset;
+      }
     }
     &--solid {
       color: var(--color-white);
@@ -78,6 +82,10 @@ defineProps({
         background: var(--color-primary);
         box-shadow: 0px 0px 10px 0px #67c9f729;
       }
+      &:disabled:hover {
+        background: var(--color-primary-light);
+        box-shadow: 0px 0px 30px 0px #67c9f721;
+      }
     }
     &--white {
       border: 1px solid #CFF0FF45;
@@ -89,6 +97,9 @@ defineProps({
       border: 1px solid var(--color-primary-light);
       &:hover {
         background: rgba(255, 255, 255, 0.1);
+      }
+      &:disabled:hover {
+        background: none;
       }
     }
     &--solid,
@@ -119,6 +130,11 @@ defineProps({
         box-shadow:
           0px 0px 20px 0px #67c9f750,
           0px 0px 60px 0px #67c9f780 inset;
+      }
+      &:disabled:hover {
+        box-shadow:
+          0px 0px 10px 0px #67c9f729,
+          0px 0px 50px 0px #67c9f761 inset;
       }
     }
   }

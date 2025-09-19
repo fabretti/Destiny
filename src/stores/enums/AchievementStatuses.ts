@@ -1,0 +1,29 @@
+export enum AchievementStatus {
+  COMPLETED = 'COMPLETED',
+  REWARD_NOT_AVAILABLE = 'REWARD_NOT_AVAILABLE',
+  REWARD_AVAILABLE = 'REWARD_AVAILABLE',
+  RESET_NOT_AVAILABLE = 'RESET_NOT_AVAILABLE',
+  RESET_AVAILABLE = 'RESET_AVAILABLE'
+}
+
+export enum AchievementType {
+  SEASONAL = 1,
+  EVENT = 2
+}
+
+export enum AchievementBadge {
+  NEW = 1,
+  VIP = 1
+}
+
+export enum ResetResult {
+  RESET_NOT_AVAILABLE = 'RESET_NOT_AVAILABLE',
+  NOT_ALL_REWARD_GIVEN = 'NOT_ALL_REWARD_GIVEN',
+  RESET_SUCCESS = 'RESET_SUCCESS'
+}
+
+export enum RewardResult {
+  NO_REWARD = 'NO_REWARD',
+  NO_VIP = 'NO_VIP',
+  REWARD_SUCCESS = 'REWARD_SUCCESS'
+}

@@ -1,0 +1,12 @@
+.el-notification {
+  --el-bg-color-overlay: var(--color-primary);
+  --el-notification-title-color: var(--color-white);
+  --el-notification-content-color: var(--color-white);
+  --el-notification-border-color: var(--color-primary-light);
+  .el-notification__title {
+    letter-spacing: 0.05em;
+  }
+  .el-notification__content {
+    line-height: 100%;
+  }
+}
