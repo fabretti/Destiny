@@ -13,6 +13,11 @@
   --el-skeleton-color: #1e2f4480;
   --el-skeleton-to-color: var(--color-primary);
 
+  .statistic-cards {
+    .el-skeleton__item {
+      border-radius: 18px;
+    }
+  }
   .el-skeleton__item {
     border: 1px solid #b3dff438;
     border-radius: 25px;

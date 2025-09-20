@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import apiClient from '@/utils/axiosConfig';
-import type { IAccountInfo, ICharacter, IAchievementsResponse, IAchievement, IBonusPacksResponse, IBonusPack, IItemDescription, IBonusPackResetResponse, IBonusPackGetResponse } from './types/LkStoreTypes';
+import type { IAccountInfo, ICharacter, IAchievementsResponse, IAchievement, IBonusPacksResponse, IBonusPack, IItemDescription, IBonusPackResetResponse, IBonusPackGetResponse, IVoteRewardResponse, IStatistics } from './types/LkStoreTypes';
 
 export const useLkStore = defineStore('lk', {
   state: () => ({
@@ -13,6 +13,7 @@ export const useLkStore = defineStore('lk', {
     characters: [] as ICharacter[],
     achievements: [] as IAchievement[],
     bonusPacks: [] as IBonusPack[],
+    statistics: null as IStatistics | null,
   }),
   getters: {
     selectedBonusPack: (state): IBonusPack | null => {
@@ -100,6 +101,23 @@ export const useLkStore = defineStore('lk', {
     async getBonusPack(charId: string, packName: string): Promise<IBonusPackGetResponse> {
       try {
         const response = await apiClient.post('/api/bonus-pack/donate/get', { char_id: charId, pack_name: packName });
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    async getVoteReward(): Promise<IVoteRewardResponse> {
+      try {
+        const response = await apiClient.post('/api/vote/get');
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    async getStatistics(charId: string): Promise<IStatistics> {
+      try {
+        const response = await apiClient.get(`/api/stat/${charId}`);
+        this.statistics = response.data;
         return response.data;
       } catch (error: any) {
         throw error;

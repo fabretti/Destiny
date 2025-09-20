@@ -11,6 +11,7 @@
         
         <CharacterSelector 
           v-model:selected-character="selectedCharacter"
+          :characters="characters"
           @change="handleCharacterChange"
           ref="characterSelectorRef"
         />
@@ -36,10 +37,17 @@ import { ref, watch, nextTick } from 'vue'
 import DefaultModal from '@/components/DefaultModal.vue'
 import CharacterSelector from '@/components/CharacterSelector.vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
+import type { ICharacter } from '@/stores/types/LkStoreTypes'
+
+interface Props {
+  characters: ICharacter[]
+}
 
 interface Emits {
   (e: 'confirm', charId: string): void
 }
+
+const props = defineProps<Props>()
 
 const isVisible = defineModel<boolean>({ default: false })
 const emit = defineEmits<Emits>()
@@ -54,10 +62,8 @@ watch(isVisible, async (newValue) => {
   
   await nextTick()
   
-  if (characterSelectorRef.value) {
-    const characters = await characterSelectorRef.value.getCharactersList()
-    selectedCharacter.value = characters[0].char_id
-
+  if (props.characters.length > 0) {
+    selectedCharacter.value = props.characters[0].char_id
   }
 })
 

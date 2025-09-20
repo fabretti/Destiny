@@ -2,7 +2,7 @@
   <WrapperBlock title="Достижения" class="achievements">
     <template #header>
       <div class="achievements-header">
-        <CharacterSelector ref="characterSelectorRef" v-model="selectedCharacter" @change="getAchievements(selectedCharacter)" />
+        <CharacterSelector ref="characterSelectorRef" v-model="selectedCharacter" :characters="lkStore.characters" @change="getAchievements(selectedCharacter)" />
       </div>
     </template>
     <div v-if="!isLoading" class="achievements-content">
@@ -117,18 +117,9 @@ const handleResetAchievement = async (data: { char_id: string, achiv_id: number 
 }
 
 onMounted(async () => {
-  isLoading.value = true
-  try {
-    if (characterSelectorRef.value) {
-      await characterSelectorRef.value.getCharactersList()
-    }
-    
-    if (lkStore.characters.length > 0) {
-      await getAchievements(lkStore.characters[0].char_id)
-      selectedCharacter.value = lkStore.characters[0].char_id
-    }
-  } finally {
-    isLoading.value = false
+  if (lkStore.characters.length > 0) {
+    selectedCharacter.value = lkStore.characters[0].char_id
+    await getAchievements(lkStore.characters[0].char_id)
   }
 })
 </script>

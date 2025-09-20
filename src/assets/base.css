@@ -12,6 +12,7 @@
   --color-grey-dark: #4b5563;
   --color-brown: #AB7C62;
   --color-border: #31445B;
+  --color-red: #FF0000;
 
   /* Typography */
   --font-family-base: 'Georgia Pro';
@@ -76,6 +77,9 @@
 }
 .color-brown {
   color: var(--color-brown);
+}
+.color-red {
+  color: var(--color-red);
 }
 
 /* Spacing utilities */

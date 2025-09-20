@@ -69,3 +69,31 @@ export interface IBonusPackGetResponse {
   result: BonusPackGetStatus;
   char_name?: string;
 }
+
+export interface IVoteRewardResponse {
+  toll?: number;
+}
+
+export interface IStatistics {
+  char_id: number;
+  total_kinah: number;
+  npc_kill: number;
+  play_time: number;
+  block_count: number;
+  total_ap: number;
+  total_gp: number;
+  lfg_message: number;
+  boss_kill: number;
+  players_damage: number;
+  npc_damage: number;
+  total_kinah_pos: number;
+  npc_kill_pos: number;
+  play_time_pos: number;
+  block_count_pos: number;
+  total_ap_pos: number;
+  total_gp_pos: number;
+  lfg_message_pos: number;
+  boss_kill_pos: number;
+  players_damage_pos: number;
+  npc_damage_pos: number;
+}

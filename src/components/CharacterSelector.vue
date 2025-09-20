@@ -9,21 +9,23 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { useLkStore } from '@/stores/LkStore'
 import type { ICharacter } from '@/stores/types/LkStoreTypes'
-import { ElNotification } from 'element-plus'
+
+interface Props {
+  characters: ICharacter[]
+}
 
 interface Emits {
   (e: 'change', value: string): void
 }
 
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
-const lkStore = useLkStore()
 const isLoading = ref(false)
 const selectedCharacter = defineModel<string>()
 
 const options = computed(() => {
-  return lkStore.characters.map((char: ICharacter) => ({
+  return props.characters.map((char: ICharacter) => ({
     value: char.char_id,
     label: char.char_name
   }))
@@ -35,21 +37,11 @@ const handleChange = (value: string) => {
 }
 
 const getCharactersList = async () => {
-  isLoading.value = true
-  try {
-    await lkStore.getCharacters()
-    if (!selectedCharacter.value && lkStore.characters.length > 0) {
-      selectedCharacter.value = lkStore.characters[0].char_id
-      handleChange(lkStore.characters[0].char_id)
-    }
-  } catch (error) {
-    ElNotification({
-      title: 'Ошибка',
-      message: 'Ошибка при загрузке персонажей',
-      type: 'error',
-    })
-  } finally {
-    isLoading.value = false
+  // Теперь персонажи передаются через props, поэтому этот метод больше не нужен
+  // Оставляем для совместимости, но логика перенесена в родительский компонент
+  if (!selectedCharacter.value && props.characters.length > 0) {
+    selectedCharacter.value = props.characters[0].char_id
+    handleChange(props.characters[0].char_id)
   }
 }
 
@@ -57,6 +49,13 @@ const getCharactersList = async () => {
 watch(() => selectedCharacter.value, (newValue) => {
   selectedCharacter.value = newValue
 })
+
+watch(() => props.characters, (newCharacters) => {
+  if (newCharacters.length > 0 && !selectedCharacter.value) {
+    selectedCharacter.value = newCharacters[0].char_id
+    handleChange(newCharacters[0].char_id)
+  }
+}, { immediate: true })
 
 defineExpose({
   getCharactersList

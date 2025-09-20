@@ -30,7 +30,7 @@
 
       <Divider variant="vertical" />
 
-      <div class="account-block bonuses">
+      <div v-loading="isBonusPacksLoading" class="account-block bonuses">
         <div class="bonuses-item">
           <div class="text-body-16 text-center text-uppercase">Бонусы за<br /> пополнение</div>
           <div class="text-body-12 text-center">Всего пополнено на: 
@@ -99,7 +99,10 @@
             <CustomInput v-model="promocode" placeholder="Введите промокод" color="white" size="sm" />
             <div class="promocode-input__bottom">
               <div class="text-body-12">Зачислено: {{ formatCurrency(0) }}</div>
-              <ButtonItem variant="solid" size="sm">Активировать</ButtonItem>
+              <ButtonItem variant="solid" size="sm" @click="isPromocodeEmpty = true">Активировать</ButtonItem>
+            </div>
+            <div v-if="isPromocodeEmpty" class="promocode-input__error">
+              <div class="text-body-12 color-red">Промокод не найден</div>
             </div>
           </div>
         </div>
@@ -111,9 +114,16 @@
         <div class="text-body-16 text-center text-uppercase">Бонусы за<br /> ММОТОР</div>
         <div class="mmotop-coins">
           <span class="text-body-14">Получено</span>
-          <span class="block text-body-12">{{ formatCurrency(133) }}</span>
+          <span class="block text-body-12">{{ formatCurrency(voteReward) }}</span>
         </div>
-        <ButtonItem variant="solid" size="sm">Забрать</ButtonItem>
+        <ButtonItem 
+          variant="solid" 
+          size="sm"
+          :loading="isVoteLoading"
+          @click="handleVoteReward"
+        >
+          Забрать
+        </ButtonItem>
         <span class="text-body-12 text-underline">Проголосовать</span>
       </div>
     </div>
@@ -132,10 +142,11 @@
         </div>
       </div>
     </div>
-    <StatisticModal v-model="isStatisticModalVisible" />
+    <StatisticModal v-model="isStatisticModalVisible" :characters="LkStore.characters" />
     <DepositModal v-model="isDepositModalVisible" :sum-to-pay="sumToPay" />
     <CharacterSelectionModal 
       v-model="isCharacterSelectionVisible" 
+      :characters="LkStore.characters"
       @confirm="handleCharacterConfirm"
       ref="characterModalRef"
     />
@@ -169,6 +180,8 @@ const isStatisticModalVisible = ref(false)
 const isDepositModalVisible = ref(false)
 const isResettingBonus = ref(false)
 const isCharacterSelectionVisible = ref(false)
+const isPromocodeEmpty = ref(false)
+const isVoteLoading = ref(false)
 const characterModalRef = ref()
 
 const socials = [
@@ -233,11 +246,23 @@ const getAccountInfo = async () => {
   }
 }
 
+const isBonusPacksLoading = ref(false)
 const getBonusPacks = async () => {
+  isBonusPacksLoading.value = true
   try {
     await LkStore.getBonusPacks()
   } catch (error) {
     console.error('Ошибка загрузки бонусных наборов:', error)
+  } finally {
+    isBonusPacksLoading.value = false
+  }
+}
+
+const getCharacters = async () => {
+  try {
+    await LkStore.getCharacters()
+  } catch (error) {
+    console.error('Ошибка загрузки персонажей:', error)
   }
 }
 
@@ -274,7 +299,12 @@ const handleGetBonus = () => {
 
 const handleCharacterConfirm = async (charId: string) => {
   try {
-    const response = await LkStore.getBonusPack(charId, selectedBonusPack.value?.pack_name)
+    const packName = selectedBonusPack.value?.pack_name
+    if (!packName) {
+      showError('Название набора не найдено')
+      return
+    }
+    const response = await LkStore.getBonusPack(charId, packName)
     
     switch (response.result) {
       case BonusPackGetStatus.BAD_PACK_NAME:
@@ -305,10 +335,31 @@ const handleCharacterConfirm = async (charId: string) => {
   }
 }
 
+const voteReward = ref(0)
+const handleVoteReward = async () => {
+  try {
+    isVoteLoading.value = true
+    const response = await LkStore.getVoteReward()
+    voteReward.value = response.toll || 0
+    if (voteReward.value) {
+      showSuccess(`Получено ${formatCurrency(voteReward.value)} толл за голосование!`)
+      await getAccountInfo()
+    } else {
+      showWarning('Нет доступных бонусов за голосование')
+    }
+  } catch (error) {
+    console.error('Ошибка получения бонусов за голосование:', error)
+    showError('Произошла ошибка при получении бонусов за голосование')
+  } finally {
+    isVoteLoading.value = false
+  }
+}
+
 onMounted(async () => {
   await Promise.all([
     getAccountInfo(),
-    getBonusPacks()
+    getBonusPacks(),
+    getCharacters()
   ])
 })
 </script>
