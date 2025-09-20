@@ -44,6 +44,7 @@ import { useRouter } from 'vue-router'
 import OnlineInfoBlock from './OnlineInfoBlock.vue'
 import IconBase from '@/shared/IconBase.vue'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useScreenSize } from '@/composables/useScreenSize'
 
 interface MenuItem {
   id: string
@@ -61,6 +62,7 @@ const props = defineProps<{
 
 const router = useRouter()
 const AuthStore = useAuthStore()
+const { isDesktop } = useScreenSize()
 const emit = defineEmits(['closeAsideMenu'])
 const defaultMenuItems: MenuItem[] = [
   {

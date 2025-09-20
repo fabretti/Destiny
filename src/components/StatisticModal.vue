@@ -1,40 +1,41 @@
 <template>
-  <DefaultModal v-model="isVisible" class="statistic-modal">
-    <div class="statistic-modal__content">
-      <h1 class="text-uppercase">Статистика</h1>
-      <div class="statistic-hero">
-        <CharacterSelector v-model="value" />
-      </div>
-      <div class="statistic-tabs">
-        <el-radio-group v-model="tabPosition" class="statistic-tabs__radio">
-          <el-radio-button value="all">Всего</el-radio-button>
-          <el-radio-button value="1day">За 1 день</el-radio-button>
-          <el-radio-button value="3days">За 3 дня</el-radio-button>
-          <el-radio-button value="7days">За 7 дней</el-radio-button>
-        </el-radio-group>
-        <el-scrollbar v-show="showAllBlock" height="350px" always>
-          <div class="statistic-cards">
-            <div v-for="item in statisticList" :key="item.id" class="statistic-card">
-              <div class="text-body-10 color-white-light">Место #{{ item.place }}</div>
-              <div class="statistic-card__num text-center">
-                {{ item.value }}
-                <p v-if="item.type" class="text-body-12">{{ item.type }}</p>
+  <teleport to="body">
+    <DefaultModal v-model="isVisible" class="statistic-modal">
+      <div class="statistic-modal__content">
+        <h1 class="text-uppercase">Статистика</h1>
+        <div class="statistic-hero">
+          <CharacterSelector v-model="value" />
+        </div>
+        <div class="statistic-tabs">
+          <el-radio-group v-model="tabPosition" class="statistic-tabs__radio">
+            <el-radio-button value="all">Всего</el-radio-button>
+            <el-radio-button value="1day">За 1 день</el-radio-button>
+            <el-radio-button value="3days">За 3 дня</el-radio-button>
+            <el-radio-button value="7days">За 7 дней</el-radio-button>
+          </el-radio-group>
+          <el-scrollbar v-show="showAllBlock" height="350px" always>
+            <div class="statistic-cards">
+              <div v-for="item in statisticList" :key="item.id" class="statistic-card">
+                <div class="text-body-10 color-white-light">Место #{{ item.place }}</div>
+                <div class="statistic-card__num text-center">
+                  {{ item.value }}
+                  <p v-if="item.type" class="text-body-12">{{ item.type }}</p>
+                </div>
+                <div class="text-body-12 text-center">{{ item.title }}</div>
+                <img src="@/assets/img/statisticCircle.png" alt="circle" class="circle">
               </div>
-              <div class="text-body-12 text-center">{{ item.title }}</div>
-              <img src="@/assets/img/statisticCircle.png" alt="circle" class="circle">
             </div>
-          </div>
-        </el-scrollbar>
-        <el-scrollbar v-show="showOneDayBlock" height="350px" always>
-          Пусто
-        </el-scrollbar>
+          </el-scrollbar>
+          <el-scrollbar v-show="showOneDayBlock" height="350px" always>
+            Пусто
+          </el-scrollbar>
+        </div>
       </div>
-    </div>
-  </DefaultModal>
-
+    </DefaultModal>
+  </teleport>
 </template>
 <script setup lang="ts">
-import DefaultModal from '@/components/Auth/DefaultModal.vue'
+import DefaultModal from '@/components/DefaultModal.vue'
 import CharacterSelector from '@/components/CharacterSelector.vue'
 import { ref, computed } from 'vue'
 
@@ -61,7 +62,7 @@ const showThreeDaysBlock = computed(() => tabPosition.value === '3days')
 const showSevenDaysBlock = computed(() => tabPosition.value === '7days')   
 </script>
 <style lang="scss">
-.statistic-modal {
+.el-dialog.statistic-modal {
   .statistic-modal__content {
     display: flex;
     flex-direction: column;
@@ -107,7 +108,9 @@ const showSevenDaysBlock = computed(() => tabPosition.value === '7days')
         background-color: #fff;
       }
     }
-
+    .el-scrollbar {
+      width: 100%;
+    }
     .statistic-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

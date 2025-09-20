@@ -33,27 +33,29 @@
       <div class="account-block bonuses">
         <div class="bonuses-item">
           <div class="text-body-16 text-center text-uppercase">Бонусы за<br /> пополнение</div>
-          <div class="text-body-12 text-center">Всего пополнено на: <span class="text-underline">{{
-            formatCurrency(LkStore.accountInfo.bonus_balance) }}</span></div>
+          <div class="text-body-12 text-center">Всего пополнено на: 
+            <span class="text-underline">
+              {{ formatCurrency(LkStore.accountInfo.bonus_balance) }}
+            </span>
+          </div>
           <div class="bonuses-item__block">
             <div class="text-body-12">{{ bonusPackStatusText }}</div>
             <div class="items">
-              <div 
+              <ItemDisplay 
                 v-for="item in selectedBonusPack?.items" 
                 :key="item.item_id" 
-                class="item"
-              >
-                <img 
-                  :src="`/images/items/${item.icon_name}`" 
-                  :alt="`item-${item.item_id}`" 
-                />
-                <div v-if="item.item_count > 1" class="item-count">
-                  {{ item.item_count }}
-                </div>
-              </div>
+                :item="item"
+              />
             </div>
           </div>
-          <ButtonItem variant="solid" size="sm">Забрать</ButtonItem>
+          <ButtonItem 
+            variant="solid" 
+            size="sm"
+            :disabled="!selectedBonusPack || selectedBonusPack.status !== 'AVAILABLE'"
+            @click="handleGetBonus"
+          >
+            Забрать
+          </ButtonItem>
         </div>
         <div class="bonuses-item all-list">
           <div class="text-body-16 text-center text-uppercase">Весь список бонусов </div>
@@ -62,19 +64,11 @@
               <div v-for="(pack, index) in LkStore.bonusPacks" :key="index" class="block-item">
                 <div class="text-body-12">{{ pack.pack_name }} - {{ formatCurrency(pack.price) }}</div>
                 <div class="items">
-                  <div 
+                  <ItemDisplay 
                     v-for="item in pack.items" 
                     :key="item.item_id" 
-                    class="item"
-                  >
-                    <img 
-                      :src="`/images/items/${item.icon_name}`" 
-                      :alt="`item-${item.item_id}`" 
-                    />
-                    <div v-if="item.item_count > 1" class="item-count">
-                      {{ item.item_count }}
-                    </div>
-                  </div>
+                    :item="item"
+                  />
                   <IconBase 
                     :name="pack.status === 'RECEIVED' ? 'accept-active' : 'accept'" 
                     size="24" 
@@ -84,7 +78,14 @@
               </div>
             </div>
           </el-scrollbar>
-          <ButtonItem variant="solid" size="sm">Обнулить</ButtonItem>
+          <ButtonItem 
+            variant="solid" 
+            size="sm"
+            :loading="isResettingBonus"
+            @click="handleResetBonus"
+          >
+            Обнулить
+          </ButtonItem>
         </div>
       </div>
     </div>
@@ -133,6 +134,11 @@
     </div>
     <StatisticModal v-model="isStatisticModalVisible" />
     <DepositModal v-model="isDepositModalVisible" :sum-to-pay="sumToPay" />
+    <CharacterSelectionModal 
+      v-model="isCharacterSelectionVisible" 
+      @confirm="handleCharacterConfirm"
+      ref="characterModalRef"
+    />
   </div>
 </template>
 
@@ -141,13 +147,18 @@ import { ref, onMounted, computed } from 'vue'
 import { formatCurrency } from '@/utils/formatters'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useLkStore } from '@/stores/LkStore'
+import { showError, showSuccess, showWarning } from '@/utils/notifications'
+import { BonusPackResetStatus } from '@/stores/enums/BonusPackResetStatuses'
+import { BonusPackGetStatus } from '@/stores/enums/BonusPackGetStatuses'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import IconBase from '@/shared/IconBase.vue'
 import Divider from '@/components/Divider.vue'
 import StatisticModal from '@/components/StatisticModal.vue'
 import DepositModal from '@/components/DepositModal.vue'
+import CharacterSelectionModal from '@/components/CharacterSelectionModal.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
+import ItemDisplay from '@/components/ItemDisplay.vue'
 
 const LkStore = useLkStore()
 const AuthStore = useAuthStore()
@@ -156,6 +167,9 @@ const promocode = ref('')
 const sumToPay = ref(null)
 const isStatisticModalVisible = ref(false)
 const isDepositModalVisible = ref(false)
+const isResettingBonus = ref(false)
+const isCharacterSelectionVisible = ref(false)
+const characterModalRef = ref()
 
 const socials = [
   { id: 1, name: 'discord', href: 'https://discord.com/aiondestiny' },
@@ -181,20 +195,6 @@ const cards = ref([
   }
 
 ])
-const bonusesList = ref([
-  {
-    id: 1,
-    amount: 350,
-    items: [1, 2, 3],
-    status: 1,
-  },
-  {
-    id: 2,
-    amount: 120,
-    items: [1, 2, 3],
-    status: 0,
-  },
-])
 
 const openDepositModal = () => {
   if (!sumToPay.value || sumToPay.value === '') {
@@ -206,7 +206,6 @@ const openDepositModal = () => {
 
 const isLoading = ref(false)
 
-// Computed свойства для бонусных наборов
 const selectedBonusPack = computed(() => LkStore.selectedBonusPack)
 const bonusPackStatusText = computed(() => {
   if (!selectedBonusPack.value) return 'Недоступно'
@@ -222,19 +221,6 @@ const bonusPackStatusText = computed(() => {
       return 'Недоступно'
   }
 })
-
-const getBonusPackStatusText = (status: string) => {
-  switch (status) {
-    case 'AVAILABLE':
-      return 'Доступно к получению'
-    case 'UNAVAILABLE':
-      return 'Недоступно'
-    case 'RECEIVED':
-      return 'Получено'
-    default:
-      return 'Недоступно'
-  }
-}
 
 const getAccountInfo = async () => {
   isLoading.value = true
@@ -252,6 +238,70 @@ const getBonusPacks = async () => {
     await LkStore.getBonusPacks()
   } catch (error) {
     console.error('Ошибка загрузки бонусных наборов:', error)
+  }
+}
+
+const handleResetBonus = async () => {
+  try {
+    isResettingBonus.value = true
+    const response = await LkStore.resetBonusPack()
+    
+    switch (response.result) {
+      case BonusPackResetStatus.NOT_ALL_REWARDS_GIVEN:
+        showWarning('Не все награды получены')
+        break
+      case BonusPackResetStatus.RESET_NOT_AVAILABLE:
+        showError('Обнуление не доступно')
+        break
+      case BonusPackResetStatus.SUCCESS:
+        showSuccess('Награды обнулены')
+        await getBonusPacks()
+        break
+    }
+  } catch (error) {
+    console.error('Ошибка обнуления награды:', error)
+    showError('Произошла ошибка при обнулении награды')
+  } finally {
+    isResettingBonus.value = false
+  }
+}
+
+const handleGetBonus = () => {
+  if (selectedBonusPack.value && selectedBonusPack.value.status === 'AVAILABLE') {
+    isCharacterSelectionVisible.value = true
+  }
+}
+
+const handleCharacterConfirm = async (charId: string) => {
+  try {
+    const response = await LkStore.getBonusPack(charId, selectedBonusPack.value?.pack_name)
+    
+    switch (response.result) {
+      case BonusPackGetStatus.BAD_PACK_NAME:
+        showError('Награда не найдена')
+        break
+      case BonusPackGetStatus.PACK_ALREADY_GIVEN:
+        showWarning('Награда уже получена')
+        break
+      case BonusPackGetStatus.PACK_NOT_AVAILABLE:
+        showError('Награда не доступна')
+        break
+      case BonusPackGetStatus.CHAR_NOT_FOUND:
+        showError('Персонаж не найден')
+        break
+      case BonusPackGetStatus.PACK_GIVEN:
+        showSuccess(`Награда отправлена персонажу ${response.char_name}`)
+        await getBonusPacks()
+        break
+    }
+  } catch (error) {
+    console.error('Ошибка получения награды:', error)
+    showError('Произошла ошибка при получении награды')
+  } finally {
+    isCharacterSelectionVisible.value = false
+    if (characterModalRef.value) {
+      characterModalRef.value.resetLoading()
+    }
   }
 }
 
@@ -366,32 +416,6 @@ onMounted(async () => {
             .items {
               display: flex;
               gap: 8px;
-              .item {
-                position: relative;
-                display: flex;
-                img {
-                  width: 24px;
-                  height: 24px;
-                  object-fit: contain;
-                }
-                
-                .item-count {
-                  position: absolute;
-                  bottom: -2px;
-                  right: -2px;
-                  background: #FFD700;
-                  color: #000;
-                  border-radius: 50%;
-                  width: 16px;
-                  height: 16px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 10px;
-                  font-weight: bold;
-                  border: 1px solid #000;
-                }
-              }
             }
           }
 
@@ -411,33 +435,6 @@ onMounted(async () => {
                 display: flex;
                 gap: 8px;
 
-                .item {
-                  position: relative;
-                  display: flex;
-                  
-                  img {
-                    width: 24px;
-                    height: 24px;
-                    object-fit: contain;
-                  }
-                  
-                  .item-count {
-                    position: absolute;
-                    bottom: -2px;
-                    right: -2px;
-                    background: #FFD700;
-                    color: #000;
-                    border-radius: 50%;
-                    width: 16px;
-                    height: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 10px;
-                    font-weight: bold;
-                    border: 1px solid #000;
-                  }
-                }
 
                 .accept {
                   position: absolute;

@@ -55,7 +55,7 @@ const handleClose = () => {
 
     .default-modal__header {
       position: absolute;
-      right: 0;
+      right: -30px;
       top: 10px;
       cursor: pointer;
     }

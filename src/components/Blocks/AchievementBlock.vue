@@ -10,14 +10,15 @@
     <div class="achievement-block__count">{{ progressText }}</div>
     <template v-for="stage in item.stages" :key="stage.progress">
       <div class="achievement-block__info">{{ stage.progress > 1 ? `Награда за ${stage.progress}` : 'Награда' }}</div>
-      <div class="achievement-block__items">
-        <img 
-          v-for="rewardItem in stage.items" 
-          :key="`${stage.progress}-${rewardItem.item_id}`"
-          :src="`/icons/${rewardItem.icon_name}`" 
-          :alt="`item-${rewardItem.item_id}`" 
-        />
-      </div>
+      <el-scrollbar always class="scrollbar-item">
+        <div class="achievement-block__items">
+          <ItemDisplay 
+            v-for="rewardItem in stage.items" 
+            :key="`${stage.progress}-${rewardItem.item_id}`"
+            :item="rewardItem"
+          />
+        </div>
+      </el-scrollbar>
     </template>
     <ButtonItem 
       v-if="showButton"
@@ -37,6 +38,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
+import ItemDisplay from '@/components/ItemDisplay.vue'
 import type { IAchievement } from '@/stores/types/LkStoreTypes'
 import { AchievementStatus, AchievementType, AchievementBadge } from '@/stores/enums/AchievementStatuses'
 
@@ -155,6 +157,7 @@ const handleButtonClick = () => {
     height: 16px;
     padding: 0 12px;
     border-radius: 0 0 4px 4px;
+    white-space: nowrap;
   }
   .achievement-block__header {
     display: grid;
@@ -176,8 +179,12 @@ const handleButtonClick = () => {
     border-radius: 50px;
     border: 1px solid #566E86B5;
   }
+  .scrollbar-item {
+    height: 40px;
+  }
   .achievement-block__items {
     display: flex;
+    justify-content: center;
     gap: 14px;
     img {
       width: 30px;

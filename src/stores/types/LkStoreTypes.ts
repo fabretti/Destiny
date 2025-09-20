@@ -1,4 +1,6 @@
 import { AchievementStatus, AchievementType, AchievementBadge } from '../enums/AchievementStatuses';
+import { BonusPackResetStatus } from '../enums/BonusPackResetStatuses';
+import { BonusPackGetStatus } from '../enums/BonusPackGetStatuses';
 
 export interface IAccountInfo {
   balance: number;
@@ -56,3 +58,14 @@ export interface IBonusPack {
 }
 
 export interface IBonusPacksResponse extends Array<IBonusPack> { }
+
+export type IItemDescription = string;
+
+export interface IBonusPackResetResponse {
+  result: BonusPackResetStatus;
+}
+
+export interface IBonusPackGetResponse {
+  result: BonusPackGetStatus;
+  char_name?: string;
+}

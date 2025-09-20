@@ -38,7 +38,7 @@
 
 </template>
 <script setup lang="ts">
-import DefaultModal from '@/components/Auth/DefaultModal.vue'
+import DefaultModal from '@/components/DefaultModal.vue'
 import { ref } from 'vue'
 import ButtonItem from '@/shared/ButtonItem.vue'
 import IconBase from '@/shared/IconBase.vue'

@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import apiClient from '@/utils/axiosConfig';
-import type { IAccountInfo, ICharacter, IAchievementsResponse, IAchievement, IBonusPacksResponse, IBonusPack } from './types/LkStoreTypes';
-import { AchievementStatus } from './enums/AchievementStatuses';
+import type { IAccountInfo, ICharacter, IAchievementsResponse, IAchievement, IBonusPacksResponse, IBonusPack, IItemDescription, IBonusPackResetResponse, IBonusPackGetResponse } from './types/LkStoreTypes';
 
 export const useLkStore = defineStore('lk', {
   state: () => ({
@@ -19,7 +18,6 @@ export const useLkStore = defineStore('lk', {
     selectedBonusPack: (state): IBonusPack | null => {
       if (state.bonusPacks.length === 0) return null;
 
-      // Приоритет: AVAILABLE -> UNAVAILABLE -> RECEIVED
       const availablePack = state.bonusPacks.find(pack => pack.status === 'AVAILABLE');
       if (availablePack) return availablePack;
 
@@ -29,7 +27,7 @@ export const useLkStore = defineStore('lk', {
       const receivedPack = state.bonusPacks.find(pack => pack.status === 'RECEIVED');
       if (receivedPack) return receivedPack;
 
-      return state.bonusPacks[0]; // fallback на первый доступный
+      return state.bonusPacks[0];
     }
   },
   actions: {
@@ -78,6 +76,30 @@ export const useLkStore = defineStore('lk', {
       try {
         const response = await apiClient.get('/api/bonus-pack/donate/list');
         this.bonusPacks = response.data;
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    async getItemDescription(itemId: number): Promise<IItemDescription> {
+      try {
+        const response = await apiClient.get(`/api/item/${itemId}`);
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    async resetBonusPack(): Promise<IBonusPackResetResponse> {
+      try {
+        const response = await apiClient.post('/api/bonus-pack/donate/reset');
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    async getBonusPack(charId: string, packName: string): Promise<IBonusPackGetResponse> {
+      try {
+        const response = await apiClient.post('/api/bonus-pack/donate/get', { char_id: charId, pack_name: packName });
         return response.data;
       } catch (error: any) {
         throw error;

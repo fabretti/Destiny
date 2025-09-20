@@ -262,7 +262,6 @@ const showPvpBlock = computed(() => isDesktop.value || tabPosition.value === 'pv
   padding: 32px 46px 46px;
   border-radius: 24px;
   background: var(--color-primary);
-  margin: 40px 0;
 
   @include mq(laptop) {
     padding: 60px 16px 32px;

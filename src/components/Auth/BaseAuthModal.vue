@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import ButtonItem from '@/shared/ButtonItem.vue'
 import { ref, computed, watch, nextTick } from 'vue'
-import DefaultModal from '@/components/Auth/DefaultModal.vue'
+import DefaultModal from '@/components/DefaultModal.vue'
 
 interface TabOption {
   value: string

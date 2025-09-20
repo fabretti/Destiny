@@ -259,7 +259,6 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 26px;
-  margin-top: 80px;
 
   .roulette-title {
     display: none;

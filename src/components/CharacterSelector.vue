@@ -1,7 +1,7 @@
 <template>
   <div  class="character-selector">
     <div class="text-body-18">Персонаж</div>
-    <el-select v-model="selectedCharacter" v-loading="isLoading" style="width: 180px" @change="handleChange">
+    <el-select v-model="selectedCharacter" v-loading="isLoading" style="width: 180px" placeholder="Выберите персонажа" @change="handleChange">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
     </el-select>
   </div>
